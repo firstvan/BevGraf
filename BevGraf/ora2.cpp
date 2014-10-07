@@ -33,7 +33,7 @@ GLdouble degToRad(GLint deg){
 }
 
 void init(){
-	glClearColor(1.0, 1.0, 1.0, 0.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glMatrixMode(GL_PROJECTION);
 	gluOrtho2D(0.0, winW, 0.0, winH);
 	glShadeModel(GL_FLAT);
@@ -66,6 +66,7 @@ void kor(){
 
 	GLdouble lepeskoz = degToRad(1);
 	glColor3f(0.0, 0.0, 1.0);
+	glLineWidth(5);
 	glBegin(GL_LINE_LOOP);
 	for (int i = 0; i < 360; i++){
 		GLdouble x = center.x + r * cos(i * lepeskoz);
@@ -95,6 +96,7 @@ void pointsDraw(){
 void mutatok(){
 
 	glColor3f(0.0, 1.0, 0.0);
+	glLineWidth(5);
 	glBegin(GL_LINES);
 		glVertex2d(center.x, center.y);
 		glVertex2d(bigPointer.x, bigPointer.y);
@@ -108,9 +110,9 @@ void mutatoKoz(){
 	glColor3f(0.0, 1.0, 1.0);
 	glLineWidth(1);
 	glBegin(GL_LINES);
-	for (int i = 1; i <= resz; i++){
-		GLdouble tempX = smallPointer.x + i * ((3 / (double)4) * r / (double)resz) * cos(rotSmall);
-		GLdouble tempY = smallPointer.y + i * ((3 / (double)4) * r / (double)resz) * sin(rotSmall);
+	for (int i = 1; i < resz; i++){
+		GLdouble tempX = center.x + i * (smallPointLen * r / (double)resz) * cos(rotSmall);
+		GLdouble tempY = center.y + i * (smallPointLen * r / (double)resz) * sin(rotSmall);
 		glVertex2d(tempX, tempY);
 
 		GLdouble temp1X = bigPointer.x - i * (r / (double)resz) * cos(rotBig);
@@ -143,7 +145,6 @@ void update(int n){
 	if (rotBig < degToRad(-270.0))
 	{
 		rotBig = degToRad(90);
-		std::cout << "meghívja" << std::endl;
 		hour--;
 		if (hour < 0)
 			hour = 11;
