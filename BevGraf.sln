@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BevGraf", "BevGraf\BevGraf.vcxproj", "{38F75A0C-1086-4A3A-878C-A49407C8711C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sokszog", "Sokszog\Sokszog.vcxproj", "{9E29C746-758E-4300-BA0F-CC1A83C2704F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{38F75A0C-1086-4A3A-878C-A49407C8711C}.Debug|Win32.Build.0 = Debug|Win32
 		{38F75A0C-1086-4A3A-878C-A49407C8711C}.Release|Win32.ActiveCfg = Release|Win32
 		{38F75A0C-1086-4A3A-878C-A49407C8711C}.Release|Win32.Build.0 = Release|Win32
+		{9E29C746-758E-4300-BA0F-CC1A83C2704F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9E29C746-758E-4300-BA0F-CC1A83C2704F}.Debug|Win32.Build.0 = Debug|Win32
+		{9E29C746-758E-4300-BA0F-CC1A83C2704F}.Release|Win32.ActiveCfg = Release|Win32
+		{9E29C746-758E-4300-BA0F-CC1A83C2704F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

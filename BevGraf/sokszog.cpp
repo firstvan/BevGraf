@@ -1,8 +1,8 @@
 #include <GL/glut.h>
+#include "point.hpp"
 
 GLint keyStates[256];
 
-GLfloat x00 = 100, y00 = 40, x11 = 200, y11 = 200;
 
 GLfloat delta = 0.01;
 
