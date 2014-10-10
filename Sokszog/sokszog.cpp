@@ -10,8 +10,13 @@ GLint winW = 1200, winH = 800;
 
 GLint keyStates[256];
 
+myPoint<GLdouble> p1Moving(1, 0);
+myPoint<GLdouble> p2Moving(-1, 0);
+
 myPoint<GLdouble> p1Center(winW/4 , winH/2);
+myPoint<GLdouble> p1Next(winW / 4 + p1Moving.getX(), winH / 2);
 myPoint<GLdouble> p2Center(3 * winW/4 , winH/2);
+myPoint<GLdouble> p2Next(3 * winW/4 + p2Moving.getX(), winH/2);
 GLdouble delta = 0.01;
 GLdouble r = 50;
 GLint p1h = 4;							//p1 Health
@@ -146,7 +151,26 @@ void circleForPlayers(){
 
 //draw polygon
 void playersDiagonal(){
-	
+	p1a.clear();
+	for (int i = 0; i < p1h; i++)
+	{
+		GLdouble pointDist = degToRad(360 / (double)p1h);
+		GLdouble tempx = p1Center.getX() + r * cos(i * pointDist);
+		GLdouble tempy = p1Center.getY() + r * sin(i * pointDist);
+
+		p1a.push_back(myPoint<GLdouble>(tempx, tempy));
+	}
+
+	p2a.clear();
+	for (int i = 0; i < p2h; i++)
+	{
+		GLdouble pointDist = degToRad(360 / (double)p2h);
+		GLdouble tempx = p2Center.getX() + r * cos(i * pointDist);
+		GLdouble tempy = p2Center.getY() + r * sin(i * pointDist);
+
+		p2a.push_back(myPoint<GLdouble>(tempx, tempy));
+	}
+
 	glColor3f(0.0, 1.0, 0.0);
 	glBegin(GL_LINES);
 	for (int i = 0; i < p1h; i++)
@@ -237,6 +261,20 @@ void keyboard(unsigned char key, int x, int y) {
 }
 */
 
+void update(int n){
+	
+	p1Next.incX();
+	p2Next.decX();
+
+	p1Center = p1Next;//a körök mozgását megvalósítani !!
+	p2Center = p2Next;
+
+	
+	
+	glutPostRedisplay();
+
+	glutTimerFunc(5, update, 0);
+}
 
 int main(int argc, char** argv)
 {
@@ -258,6 +296,8 @@ int main(int argc, char** argv)
 
 	glutKeyboardUpFunc(keyUp);
 	
+	glutTimerFunc(5, update, 0);
+
 	glutMainLoop();
 
 	return 0;
