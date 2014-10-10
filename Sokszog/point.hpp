@@ -3,15 +3,16 @@
 
 #include <GL/glut.h>
 
+template<typename T>
 class myPoint{
-	GLdouble x, y;
+	T x, y;
 
 public:
 	//pont inicializálása
 	myPoint() : x(0), y(0){}
 
 	//pont létrehozása x,y pontban
-	myPoint(GLdouble rhsX, GLdouble rhsY) : x(rhsX), y(rhsY)
+	myPoint(T rhsX, T rhsY) : x(rhsX), y(rhsY)
 	{}
 
 	//másoló konstruktor
@@ -20,33 +21,24 @@ public:
 		y = rhs.getY();
 	}
 
-	//másoló értékadás
-	/*myPoint& operator=(const myPoint& rhs){
-	if (this != &rhs)
-	{
-	this->setX(rhs.getX());
-	this->setY(rhs.getY());
-	}
-
-	}*/
 
 	//x visszatérítése
-	GLdouble getX() const{
+	T getX() const{
 		return x;
 	}
 
 	//y visszatérítése
-	GLdouble getY() const{
+	T getY() const{
 		return y;
 	}
 
 	//x beállítása
-	void setX(GLdouble& rhsx){
+	void setX(T& rhsx){
 		x = rhsx;
 	}
 
 	//y beállytása
-	void setY(GLdouble& rhsy){
+	void setY(T& rhsy){
 		y = rhsy;
 	}
 
@@ -55,6 +47,22 @@ public:
 		glBegin(GL_POINTS);
 		glVertex2d(x, y);
 		glEnd();
+	}
+
+	void incX(){
+		x++;
+	}
+
+	void incY(){
+		y++;
+	}
+
+	void decX(){
+		x--;
+	}
+
+	void decY(){
+		y--;
 	}
 
 
