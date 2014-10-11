@@ -2,6 +2,8 @@
 #define POINTS_HPP
 
 #include <GL/glut.h>
+#include <math.h>
+#include "vector.hpp"
 
 template<typename T>
 class myPoint{
@@ -42,6 +44,11 @@ public:
 		y = rhsy;
 	}
 
+	void change( myVector<T> rhs){
+		x += rhs.getX();
+		y += rhs.getY();
+	}
+
 	//pont kirajzolása
 	void display() const{
 		glBegin(GL_POINTS);
@@ -65,6 +72,15 @@ public:
 		y--;
 	}
 
+	void add(T rhsX, T rhsY){
+		x += rhsX;
+		y += rhsY;
+	}
+
+	void sub(T rhsX, T rhsY){
+		x -= rhsX;
+		y -= rhsY;
+	}
 
 	// pontok egyenlõség vizsgálata
 	bool operator==(myPoint& rhs) const{
@@ -83,6 +99,22 @@ public:
 		return myPoint(this->getX() + rhs.getX(), this->getY() + rhs.getY());
 	}
 
+	double lineDistance2(const myPoint& a1, const myPoint& a2){
+		GLdouble x = a1.getY() - a2.getY();
+		GLdouble y = a2.getX() - a1.getX();
+		GLdouble c = x * a1.getX() + y * a1.getY();
+
+		return pow(fabs(x * this->getX() + y * this->getY() - c), 2) / (pow(x, 2) + pow(y, 2));
+	}
+
+
+	double lineDistance(const myPoint& a1, const myPoint& a2){
+		GLdouble x = a1.getY() - a2.getY();
+		GLdouble y = a2.getX() - a1.getX();
+		GLdouble c = (a1.getY() - a2.getY()) * a1.getX() + (a2.getX() - a1.getX()) * a1.getY();
+
+		return abs(x * this->getX() + y * this->getY() - c) / sqrt(x * x + y * y);
+	}
 
 
 };

@@ -1,31 +1,38 @@
 #include <GL/glut.h>
 #include "point.hpp"
+#include "vector.hpp"
 #include <math.h>
 #include <vector>
 #include <iostream>
 
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406
 
-GLint winW = 1200, winH = 800;
+GLdouble winW = 700.0, winH = 500.0;
 
 GLint keyStates[256];
 
-myPoint<GLdouble> p1Moving(1, 0);
-myPoint<GLdouble> p2Moving(-1, 0);
+myVector<GLdouble> p1Next(1, 1);
+myVector<GLdouble> p2Next(-1, 1);
 
 myPoint<GLdouble> p1Center(winW/4 , winH/2);
-myPoint<GLdouble> p1Next(winW / 4 + p1Moving.getX(), winH / 2);
 myPoint<GLdouble> p2Center(3 * winW/4 , winH/2);
-myPoint<GLdouble> p2Next(3 * winW/4 + p2Moving.getX(), winH/2);
 GLdouble delta = 0.01;
 GLdouble r = 50;
-GLint p1h = 4;							//p1 Health
-GLint p2h = 4;							//p2 Health
+GLint p1h = 7;							//p1 Health
+GLint p2h = 7;							//p2 Health
 std::vector<myPoint<GLdouble>> p1a;		//player one angle
 std::vector<myPoint<GLdouble>> p2a;		//player two angle
 myPoint<GLdouble> player1(winW / 2, winH);
 myPoint<GLdouble> player2(winW / 2, 0);
-
+myVector<GLdouble> playerWall(player2.getX() - player1.getX(), player2.getY() - player1.getY());
+myPoint<GLdouble> LD(0.0, 0.0);
+myPoint<GLdouble> LU(0.0, static_cast<GLdouble>(winH));
+myPoint<GLdouble> RD(static_cast<GLdouble>(winW), 0.0);
+myPoint<GLdouble> RU(static_cast<GLdouble>(winW), static_cast<GLdouble>(winH));
+myVector<GLdouble> left(LU.getX() - LD.getX(), LU.getY() - LD.getY());
+myVector<GLdouble> right(RU.getX() - RD.getX(), RU.getY() - RD.getY());
+myVector<GLdouble> top(RU.getX() - LU.getX(), RU.getY() - LU.getY());
+myVector<GLdouble> bottom(RD.getX() - LD.getX(), RD.getY() - LD.getY());
 
 GLdouble degToRad(GLdouble deg){	//fok átváltása radiánba
 	return deg * (PI / 180);
@@ -56,6 +63,8 @@ void init(void)
 
 		p2a.push_back(myPoint<GLdouble>(tempx, tempy));
 	}
+
+	
 }
 
 void keyPressed(unsigned char key, int x, int y) {
@@ -68,59 +77,51 @@ void keyUp(unsigned char key, int x, int y) {
 
 	
 void keyOperations(){ 
-	//player one control
-	if (keyStates['w'])
-	{
-		if (player1.getY() != winH && (player1.getX() == 0 || player1.getX() == winW))
-			player1.incY();
+	
+	double x = 0.05;
+	double y = 0.05;
+
+	//first player control
+	if (keyStates['w']){
+		if (player1.getY() < winH && (player1.getX() <= 0 || player1.getX() >= winW))
+			player1.add(0, y);
 	}
 
-	if (keyStates['a'])
-	{
-		if (player1.getX() != 0 && (player1.getY() == 0 || player1.getY() == winH))
-			player1.decX();
+	if (keyStates['a']){
+		if (player1.getX() > 0 && (player1.getY() <= 0 || player1.getY() >= winH))
+			player1.sub(x, 0);
 	}
 
-	if (keyStates['s'])
-	{
-		if (player1.getY() != 0 && (player1.getX() == 0 || player1.getX() == winW))
-			player1.decY();
+	if (keyStates['s']){
+		if (player1.getY() > 0 && (player1.getX() <= 0 || player1.getX() >= winW))
+			player1.sub(0, y);
 	}
 
-	if (keyStates['d'])
-	{
-		if (player1.getX() != winW && (player1.getY() == 0 || player1.getY() == winH))
-			player1.incX();
-	}
-	//end player one control
-
-	//player two control
-	if (keyStates['i'])
-	{
-		if (player2.getY() != winH && (player2.getX() == 0 || player2.getX() == winW))
-			player2.incY();
+	if (keyStates['d']){
+		if (player1.getX() < winW && (player1.getY() <= 0|| player1.getY() >= winH))
+			player1.add(x, 0);
 	}
 
-	if (keyStates['j'])
-	{
-		if (player2.getX() != 0 && (player2.getY() == 0 || player2.getY() == winH))
-			player2.decX();
+	//second player control
+	if (keyStates['i']){
+		if (player2.getY() < winH && (player2.getX() <= 0 || player2.getX() >= winW))
+			player2.add(0, y);
 	}
 
-	if (keyStates['k'])
-	{
-		if (player2.getY() != 0 && (player2.getX() == 0 || player2.getX() == winW))
-			player2.decY();
+	if (keyStates['j']){
+		if (player2.getX() > 0 && (player2.getY() <= 0 || player2.getY() >= winH))
+			player2.sub(x, 0);
 	}
 
-	if (keyStates['l'])
-	{
-		if (player2.getX() != winW && (player2.getY() == 0 || player2.getY() == winH))
-			player2.incX();
+	if (keyStates['k']){
+		if (player2.getY() > 0 && (player2.getX() <= 0 || player2.getX() >= winW))
+			player2.sub(0, y);
 	}
-	//end player two control
 
-
+	if (keyStates['l']){
+		if (player2.getX() < winW && (player2.getY() <= 0 || player2.getY() >= winH))
+			player2.add(x, 0);
+	}
 	glutPostRedisplay();
 }
 
@@ -262,18 +263,16 @@ void keyboard(unsigned char key, int x, int y) {
 */
 
 void update(int n){
+	p1Center.change(p1Next);
 	
-	p1Next.incX();
-	p2Next.decX();
-
-	p1Center = p1Next;//a körök mozgását megvalósítani !!
-	p2Center = p2Next;
-
-	
+	if (p1Center.lineDistance2(player1, player2) < r * r)
+	{
+		p1Next = snap(p1Next, playerWall);
+	}
 	
 	glutPostRedisplay();
 
-	glutTimerFunc(5, update, 0);
+	glutTimerFunc(15, update, 0);
 }
 
 int main(int argc, char** argv)
@@ -296,7 +295,7 @@ int main(int argc, char** argv)
 
 	glutKeyboardUpFunc(keyUp);
 	
-	glutTimerFunc(5, update, 0);
+	glutTimerFunc(15, update, 0);
 
 	glutMainLoop();
 
