@@ -47,17 +47,18 @@ public:
 		return myVector<T>(x + rhs.getX(), y + rhs.getY());
 	}
 
-	friend T multiply(myVector<T>& a, myVector<T>& b){
-		return (a.getX() * b.getX() + a.getY() * b.getY());
+	friend T multiply(myVector<T> a, myVector<T> b){
+		return (a.getX() * b.getX()) + (a.getY() * b.getY());
 	}
 
-	friend myVector<T> snap(myVector<T> &a, myVector<T> &b){
-		GLdouble c = 2 * (multiply(a, b) / multiply(a,a));
-		myVector tx (a * -1);
-		myVector ty (b * c);
-
-		return myVector<T>(tx + ty);
+	void snap(myVector<T> a){
+		GLdouble c = 2 * multiply(a, *this) / multiply(a,a);
+		
+		x = -x + c * a.getX();
+		y = -y + c * a.getY();
+		
 	}
+
 
 };
 

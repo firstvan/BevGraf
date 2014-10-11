@@ -5,6 +5,7 @@
 #include <math.h>
 #include "vector.hpp"
 
+
 template<typename T>
 class myPoint{
 	T x, y;
@@ -44,9 +45,12 @@ public:
 		y = rhsy;
 	}
 
-	void change( myVector<T> rhs){
-		x += rhs.getX();
-		y += rhs.getY();
+	void addX(T val){
+		x += val;
+	}
+
+	void addY(T val){
+		y += val;
 	}
 
 	//pont kirajzolása
@@ -102,9 +106,9 @@ public:
 	double lineDistance2(const myPoint& a1, const myPoint& a2){
 		GLdouble x = a1.getY() - a2.getY();
 		GLdouble y = a2.getX() - a1.getX();
-		GLdouble c = x * a1.getX() + y * a1.getY();
+		GLdouble c = (a1.getY() - a2.getY()) * a1.getX() + (a2.getX() - a1.getX()) * a1.getY();
 
-		return pow(fabs(x * this->getX() + y * this->getY() - c), 2) / (pow(x, 2) + pow(y, 2));
+		return pow(fabs(x * this->getX() + y * this->getY() - c), 2) / (x * x + y * y);
 	}
 
 
@@ -114,6 +118,12 @@ public:
 		GLdouble c = (a1.getY() - a2.getY()) * a1.getX() + (a2.getX() - a1.getX()) * a1.getY();
 
 		return abs(x * this->getX() + y * this->getY() - c) / sqrt(x * x + y * y);
+	}
+
+	double pointDis2(const myPoint & p){
+		GLdouble retX = x - p.getX();
+		GLdouble retY = y - p.getY();
+		return (retX * retX + retY * retY);
 	}
 
 
