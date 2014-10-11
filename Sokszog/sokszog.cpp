@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include <GL/freeglut_ext.h>	//glutLeaveMainLoop() miatt kell!
 #include "point.hpp"
 #include "vector.hpp"
 #include <math.h>
@@ -8,34 +9,44 @@
 #include <ctime>
 
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406
-
+//Ablak mérete
 GLint winW = 700.0, winH = 500.0;
+//több billentyû használatához
 GLint keyStates[256];
-myVector<GLdouble> p1Next(1, 1);
-myVector<GLdouble> p2Next(-1, 1);
-myPoint<GLdouble> p1Center(winW/4 , winH/2); // elsõ játékos körének középpontja
-myPoint<GLdouble> p2Center(3 * winW/4 , winH/2);
 GLdouble delta = 0.01;
+//Labdák mozgató vectora
+myVector<GLdouble> p1Next(1, 1);
+myVector<GLdouble> p2Next(-1, -1);
+//labdák középpontjai
+myPoint<GLdouble> p1Center(winW/4 , winH/2);
+myPoint<GLdouble> p2Center(3 * winW/4 , winH/2);
 GLdouble r = 50;
+//Sokszögek száma
 GLint p1h = 7;							//p1 Health
 GLint p2h = 7;							//p2 Health
 std::vector<myPoint<GLdouble>> p1a;		//player one angle
 std::vector<myPoint<GLdouble>> p2a;		//player two angle
+//Játékosok pontjai
 myPoint<GLdouble> player1(winW / 2, winH);
 myPoint<GLdouble> player2(winW / 2, 0);
+//Játékosok által meghatározott vektor
 myVector<GLdouble> playerWall(player1.getX() - player2.getX(), player1.getY() - player2.getY());
-myPoint<GLdouble> LD(0.0, 0.0);
-myPoint<GLdouble> LU(0.0, static_cast<GLdouble>(winH));
-myPoint<GLdouble> RD(static_cast<GLdouble>(winW), 0.0);
+//keret 4 pontja
+myPoint<GLdouble> LD(1.0, 1.0);
+myPoint<GLdouble> LU(1.0, static_cast<GLdouble>(winH));
+myPoint<GLdouble> RD(static_cast<GLdouble>(winW), 1.0);
 myPoint<GLdouble> RU(static_cast<GLdouble>(winW), static_cast<GLdouble>(winH));
+//keret oldalai
 myVector<GLdouble> left(LU.getX() - LD.getX(), LU.getY() - LD.getY());
 myVector<GLdouble> right(RU.getX() - RD.getX(), RU.getY() - RD.getY());
 myVector<GLdouble> top(RU.getX() - LU.getX(), RU.getY() - LU.getY());
 myVector<GLdouble> bottom(RD.getX() - LD.getX(), RD.getY() - LD.getY());
+//Sokszögeket növelõ pontok
 myPoint<GLdouble> food1((winW / 2) + 50, 50);
 myPoint<GLdouble> food2((winW / 2) - 50, winH - 50);
 
-GLdouble degToRad(GLdouble deg){	//fok átváltása radiánba
+//fok átváltása radiánná
+GLdouble degToRad(GLdouble deg){
 	return deg * (PI / 180);
 }
 
@@ -46,26 +57,6 @@ void init(void)
 	glEnable(GL_POINT_SMOOTH);
 	glMatrixMode(GL_PROJECTION);
 	gluOrtho2D(0.0, winW, 0.0, winH);
-
-	for (int i = 0; i < p1h; i++)
-	{
-		GLdouble pointDist = degToRad(360 / (double) p1h);
-		GLdouble tempx = p1Center.getX() + r * cos(i * pointDist);
-		GLdouble tempy = p1Center.getY() + r * sin(i * pointDist);
-
-		p1a.push_back(myPoint<GLdouble>(tempx, tempy));
-	}
-
-	for (int i = 0; i < p2h; i++)
-	{
-		GLdouble pointDist = degToRad(360 / (double) p2h);
-		GLdouble tempx = p2Center.getX() + r * cos(i * pointDist);
-		GLdouble tempy = p2Center.getY() + r * sin(i * pointDist);
-
-		p2a.push_back(myPoint<GLdouble>(tempx, tempy));
-	}
-	
-	
 }
 
 void keyPressed(unsigned char key, int x, int y) {
@@ -78,8 +69,7 @@ void keyUp(unsigned char key, int x, int y) {
 
 	
 void keyOperations(){ 
-
-	//first player control
+	//Elsõ játékos irányitása: w, a, s, d
 	if (keyStates['w']){
 		if (player1.getY() < winH && (player1.getX() <= 0 || player1.getX() >= winW))
 			player1.add(0, delta);
@@ -100,7 +90,7 @@ void keyOperations(){
 			player1.add(delta, 0);
 	}
 
-	//second player control
+	//Második játékos irányítása: i, j, k, l
 	if (keyStates['i']){
 		if (player2.getY() < winH && (player2.getX() <= 0 || player2.getX() >= winW))
 			player2.add(0, delta);
@@ -121,17 +111,21 @@ void keyOperations(){
 			player2.add(delta, 0);
 	}
 
+	//Pontok mozgatása utáni általuk meghatározott irányvektorok újraszámolása
 	playerWall.setX(player1.getX() - player2.getX());
 	playerWall.setY(player1.getY() - player2.getY());
+
 	glutPostRedisplay();
 }
 
 
-//elsõ játékos körének létrehozása
+//Játékosok köreinek kirajzoltatása
 void circleForPlayers(){
 	
 	GLdouble lepeskoz = degToRad(1);
 	glColor3f(0.0, 0.0, 0.0);
+	
+	//Player green
 	glBegin(GL_LINE_LOOP);
 	for (int i = 0; i < 360; i++){
 		GLdouble x = p1Center.getX() + r * cos(i * lepeskoz);
@@ -140,6 +134,7 @@ void circleForPlayers(){
 	}
 	glEnd();
 
+	//Player blue
 	glBegin(GL_LINE_LOOP);
 	for (int i = 0; i < 360; i++){
 		GLdouble x = p2Center.getX() + r * cos(i * lepeskoz);
@@ -151,8 +146,10 @@ void circleForPlayers(){
 
 }
 
-//draw polygon
+//sokszögek kirajzoltatása
 void playersDiagonal(){
+	
+	//Elsõ játékos sokszögeit meghatározó vektor kiüritése majd feltölteni a megfelelõ pontokkal (mozgás miatt kell mindig kirajzoltatni)
 	p1a.clear();
 	for (int i = 0; i < p1h; i++)
 	{
@@ -163,6 +160,17 @@ void playersDiagonal(){
 		p1a.push_back(myPoint<GLdouble>(tempx, tempy));
 	}
 
+	glColor3f(0.0, 1.0, 0.0);
+	glBegin(GL_LINES);
+	for (int i = 0; i < p1h; i++)
+		for (int j = i + 1; j < p1h; j++){
+		glVertex2d(p1a.at(i).getX(), p1a.at(i).getY());
+		glVertex2d(p1a.at(j).getX(), p1a.at(j).getY());
+		}
+	glEnd();
+
+	
+	//Második játékos sokszögeit meghatározó vektor kiüritése majd feltölteni a megfelelõ pontokkal (mozgás miatt kell mindig kirajzoltatni)
 	p2a.clear();
 	for (int i = 0; i < p2h; i++)
 	{
@@ -173,15 +181,6 @@ void playersDiagonal(){
 		p2a.push_back(myPoint<GLdouble>(tempx, tempy));
 	}
 
-	glColor3f(0.0, 1.0, 0.0);
-	glBegin(GL_LINES);
-	for (int i = 0; i < p1h; i++)
-		for (int j = i + 1; j < p1h; j++){
-		glVertex2d(p1a.at(i).getX(), p1a.at(i).getY());
-		glVertex2d(p1a.at(j).getX(), p1a.at(j).getY());
-		}
-	glEnd();
-	
 	glColor3f(0.0, 0.0, 1.0);
 	glBegin(GL_LINES);
 	for (int i = 0; i < p2h; i++)
@@ -190,25 +189,24 @@ void playersDiagonal(){
 		glVertex2d(p2a.at(j).getX(), p2a.at(j).getY());
 		}
 	glEnd();
-
-
 }
 
 void playersLine(){
 	glPointSize(10);
 
-	//display player one point
+	//Elsõ játékos ponjának megjelenítése
 	glColor3f(0.0, 1.0, 0.0);
 	glBegin(GL_POINTS);
 		glVertex2d(player1.getX(), player1.getY());
 	glEnd();
 
-	//display player two point
+	//Második játékos pontjainak kirajzoltatása
 	glColor3f(0.0, 0.0, 1.0);
 	glBegin(GL_POINTS);
 		glVertex2d(player2.getX(), player2.getY());
 	glEnd();
 
+	//Két játékos által meghatározott fal kirajzoltatása
 	glColor3f(0.0, 0.0, 0.0);
 	glBegin(GL_LINES);
 		glVertex2d(player1.getX(), player1.getY());
@@ -219,6 +217,7 @@ void playersLine(){
 void foods(){
 	glPointSize(5);
 
+	//Kaják kirajzoltatása
 	glColor3f(0.0, 1.0, 0.0);
 	glBegin(GL_POINTS);
 		glVertex2d(food1.getX(), food1.getY());
@@ -230,9 +229,19 @@ void foods(){
 	glEnd();
 }
 
+//keret megrajzolása
+void frame(){
+	glColor3f(0.0, 1.0, 1.0);
+	glBegin(GL_LINE_LOOP);
+	glVertex2d(LD.getX(), LD.getY());
+	glVertex2d(LU.getX(), LU.getY());
+	glVertex2d(RU.getX(), RU.getY());
+	glVertex2d(RD.getX(), RD.getY());
+	glEnd();
+}
+
 void display(void)
 {
-
 	keyOperations();
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -240,132 +249,131 @@ void display(void)
 	playersDiagonal();
 	playersLine();
 	foods();
-
+	frame();
+	
 	glutSwapBuffers();
 }
 
 
 void update(int n){
+	//Elsõ játékos körének pattanásai:
 	p1Center.addX(p1Next.getX());
 	p1Center.addY(p1Next.getY());
-	
 
-	if (p1Center.lineDistance2(player1, player2) < r * r)
-	{
+	//Játékosfalról
+	if (p1Center.lineDistance2(player1, player2) < r * r){
 		p1Next.snap(playerWall);
 	}
 
-	if (p1Center.lineDistance2(LU, RU) < r * r)
-	{
+	//Felsõfalról
+	if (p1Center.lineDistance2(LU, RU) < r * r){
 		p1Next.snap(top);
 	}
 	
-	if (p1Center.lineDistance2(LD, RD) < r * r)
-	{
+	//Talajról
+	if (p1Center.lineDistance2(LD, RD) < r * r){
 		p1Next.snap(bottom);
 	}
 
-	if (p1Center.lineDistance2(RU, RD) < r * r)
-	{
+	//Jobb falról
+	if (p1Center.lineDistance2(RU, RD) < r * r){
 		p1Next.snap(right);
 	}
 
-	if (p1Center.lineDistance2(LU, LD) < r * r)
-	{
+	//Bal falról
+	if (p1Center.lineDistance2(LU, LD) < r * r){
 		p1Next.snap(left);
 	}
 
+	//Második játékos körének pattanásai az elõbbiek szerint
 	p2Center.addX(p2Next.getX());
 	p2Center.addY(p2Next.getY());
-	
 
-	if (p2Center.lineDistance2(player1, player2) < r * r)
-	{
+	if (p2Center.lineDistance2(player1, player2) < r * r){
 		p2Next.snap(playerWall);
 	}
 
-	if (p2Center.lineDistance2(LU, RU) < r * r)
-	{
+	if (p2Center.lineDistance2(LU, RU) < r * r){
 		p2Next.snap(top);
 	}
 	
-	if (p2Center.lineDistance2(LD, RD) < r * r)
-	{
+	if (p2Center.lineDistance2(LD, RD) < r * r){
 		p2Next.snap(bottom);
 	}
 
-	if (p2Center.lineDistance2(RU, RD) < r * r)
-	{
+	if (p2Center.lineDistance2(RU, RD) < r * r){
 		p2Next.snap(right);
 	}
 
-	if (p2Center.lineDistance2(LU, LD) < r * r)
-	{
+	if (p2Center.lineDistance2(LU, LD) < r * r){
 		p2Next.snap(left);
 	}
 
 
-	//foods
+	//Kaják pontjainak meghatározása továbbá a kaják megevésének feltételei
+	GLint tempW = winW - r;
+	GLint tempH = winH - r;
 	if (p1Center.pointDis2(food1) < r * r){
 		p1h++;
-		
-		GLdouble tempx = rand() % winW - 50 + r;
+		GLdouble tempx = rand() % tempW + r;
 		food1.setX(tempx);
-		
-		GLdouble tempy = rand() % winH - 50 + r;
+		GLdouble tempy = rand() % tempH + r;
 		food1.setY(tempy);
 	}
 
 	if (p1Center.pointDis2(food2) < r * r){
 		p1h--;
-
-		GLdouble tempx = rand() % winW - 50 + r;
+		GLdouble tempx = rand() % tempW + r;
 		food2.setY(tempx);
-
-		GLdouble tempy = rand() % winH - 50 + r;
+		GLdouble tempy = rand() % tempH + r;
 		food2.setY(tempy);
 	}
 
 	if (p2Center.pointDis2(food2) < r * r){
 		p2h++;
-
-		GLdouble tempx = rand() % winW - 50 + r;
+		GLdouble tempx = rand() % tempW + r;
 		food2.setX(tempx);
-
-		GLdouble tempy = rand() % winH - 50 + r;
+		GLdouble tempy = rand() % tempH + r;
 		food2.setY(tempy);
 	}
 
 	if (p2Center.pointDis2(food1) < r * r){
 		p2h--;
-
-		GLdouble tempx = rand() % winW - 50 + r;
+		GLdouble tempx = rand() % tempW + r;
 		food1.setX(tempx);
-
-		GLdouble tempy = rand() % winH - 50 + r;
+		GLdouble tempy = rand() % tempH + r;
 		food1.setY(tempy);
+	}
 
+	//Nyertes Kiiratása
+	if (p1h == 20 || p2h == 2){
+		std::cout << "zold nyert" << std::endl;
+		glutLeaveMainLoop();
 
 	}
 
-
+	if (p2h == 20 || p1h == 2){
+		std::cout << "kek nyert" << std::endl;
+		glutLeaveMainLoop();
+	}
+	
 	glutPostRedisplay();
-
 	glutTimerFunc(10, update, 0);
 }
 
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
+	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);	//glutLeaveMainLoop() miatt.
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowPosition(25, 25);
 	glutInitWindowSize(winW, winH);
-	glutCreateWindow("multiple key press");
+	glutCreateWindow("Ball games");
 
 	init();
 
 	srand(time(NULL));
-
+	
 	glutDisplayFunc(display);
 
 	glutKeyboardFunc(keyPressed);
@@ -376,6 +384,7 @@ int main(int argc, char** argv)
 
 	glutMainLoop();
 
+	while (true);	//eredmény miatt kell, hogy látható legyen
 	return 0;
 }
 
