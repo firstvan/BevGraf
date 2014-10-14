@@ -12,6 +12,9 @@ void init (void)
 
     glMatrixMode (GL_PROJECTION);		// Set projection parameters.
     gluOrtho2D (0.0, 400.0, 0.0, 300.0);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_POINT_SMOOTH);
 }
 
 void lineSegment (void)
@@ -19,8 +22,13 @@ void lineSegment (void)
     glClear (GL_COLOR_BUFFER_BIT);  // Clear display window.
 
     glColor3f (1.0, 0.4, 0.2);      
+	glPointSize(5);
 
 	circle1.draw();
+	circle1.drawCenter();
+	circle1.split(9);
+	circle1.drawSplit();
+	circle1.drawDiagonals();
 
     glFlush ( );     // Process all OpenGL routines as quickly as possible.
 }
