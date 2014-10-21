@@ -57,6 +57,10 @@ void init(void)
 	glEnable(GL_POINT_SMOOTH);
 	glMatrixMode(GL_PROJECTION);
 	gluOrtho2D(0.0, winW, 0.0, winH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+
 }
 
 void keyPressed(unsigned char key, int x, int y) {

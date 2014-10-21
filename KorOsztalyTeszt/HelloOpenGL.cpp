@@ -24,11 +24,17 @@ void lineSegment (void)
     glColor3f (1.0, 0.4, 0.2);      
 	glPointSize(5);
 
-	circle1.draw();
-	circle1.drawCenter();
+	//circle1.draw();
+	//circle1.drawCenter();
 	circle1.split(9);
-	circle1.drawSplit();
-	circle1.drawDiagonals();
+	circle1.drawSplitted();
+	circle1.drawEvolvent();
+
+	circle1.split(4);
+	circle1.drawSplitted();
+	circle1.drawEvolvent();
+	//circle1.drawSplit();
+	//circle1.drawDiagonals();
 
     glFlush ( );     // Process all OpenGL routines as quickly as possible.
 }

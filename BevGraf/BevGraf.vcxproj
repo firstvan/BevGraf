@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sokszog.cpp" />
+    <ClCompile Include="ora2.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{38F75A0C-1086-4A3A-878C-A49407C8711C}</ProjectGuid>

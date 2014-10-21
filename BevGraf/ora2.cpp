@@ -21,7 +21,7 @@ GLdouble rotSmall, rotBig;
 GLdouble r = 300.0;
 Point2D points[12];
 Point2D smallPoints[12];
-GLint resz = 10;
+GLint resz = 21;
 
 void pointInit(Point2D& a, GLdouble a1, GLdouble a2){
 	a.x = a1;
@@ -38,16 +38,18 @@ void init(){
 	gluOrtho2D(0.0, winW, 0.0, winH);
 	glShadeModel(GL_FLAT);
 	glPointSize(5.0);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_POINT_SMOOTH);		//pontok kerekítése
 	rotBig = degToRad(90.0);		//a nagymutatót 90 fokkal forgatjuk, hogy "12" -esre mutasson
 	rotSmall = degToRad(0.0);		
 
-	GLdouble temp = r * cos(rotBig);	
-	GLdouble temp1 = r * sin(rotSmall);
+	GLdouble temp = (r - 50) * cos(rotBig);	
+	GLdouble temp1 = (r - 50) * sin(rotSmall);
 
 
 	pointInit(center, winW / 2, winH / 2);
-	pointInit(bigPointer, center.x+ temp, center.y + temp1);
+	pointInit(bigPointer, center.x + temp, center.y + temp1);
 
 	temp = smallPointLen * cos(degToRad(0));
 	temp1 = smallPointLen * r * sin(degToRad(0));
@@ -118,8 +120,8 @@ void mutatoKoz(){
 		GLdouble tempY = center.y + i * (smallPointLen * r / (double)resz) * sin(rotSmall);
 		glVertex2d(tempX, tempY);
 
-		GLdouble temp1X = bigPointer.x - i * (r / (double)resz) * cos(rotBig);
-		GLdouble temp1Y = bigPointer.y - i * (r / (double)resz) * sin(rotBig);
+		GLdouble temp1X = bigPointer.x - i * ((r - 50) / (double)resz) * cos(rotBig);
+		GLdouble temp1Y = bigPointer.y - i * ((r - 50) / (double)resz) * sin(rotBig);
 		glVertex2d(temp1X, temp1Y);
 	}
 	glEnd();
@@ -162,8 +164,8 @@ void update(int n){
 	}
 
 
-	bigPointer.x = center.x + r * cos(rotBig);
-	bigPointer.y = center.y + r * sin(rotBig);
+	bigPointer.x = center.x + (r - 50) * cos(rotBig);
+	bigPointer.y = center.y + (r - 50) * sin(rotBig);
 	
 	
 

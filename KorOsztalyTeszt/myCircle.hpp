@@ -4,6 +4,7 @@
 #include "point.hpp"
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 
 #define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406
@@ -14,6 +15,7 @@ class myCircle{
 	myPoint<T> center;
 	std::vector<myPoint<T>> nPoints;
 	T r;
+	int splt = 0;
 
 public:
 	
@@ -49,6 +51,11 @@ public:
 		this->split(n);
 	}
 
+
+	void setR(const T& rhs){
+		r = rhs;
+	}
+
 	//draw the circle
 	void inline draw(){
 		glBegin(GL_LINE_LOOP);
@@ -67,10 +74,20 @@ public:
 		glEnd();
 	}
 
+	void inline drawSplitted(){
+		glBegin(GL_LINE_LOOP);
+
+		for(auto vec : nPoints){
+			glVertex2d(vec.getX(), vec.getY());
+		}
+
+		glEnd();
+	}
+
 	//split the circle to n equals part
 	void inline split(GLint n){
 		nPoints.clear();
-
+		splt = n;
 		for (int i = 0; i < n; i++){
 			nPoints.push_back(myPoint<GLdouble>(center.getX() + r*cos(i* degToRad(360 / (double)n)), center.getY() + r*sin(i* degToRad(360 / (double)n))));
 		}
@@ -98,6 +115,24 @@ public:
 
 	GLdouble static degToRad(GLint a){
 		return PI * a / 180;
+	}
+
+	void inline drawEvolvent(){
+		glPointSize(1);
+		glBegin(GL_POINTS);
+		std::cout << splt << std::endl;
+		for (int j = 0; j < splt; j++)
+		{
+			GLdouble rotate = j * degToRad(360 / (double)splt);
+
+			for (int i = 0; i < 50; i++){
+				GLdouble tempRad = degToRad(i);
+				GLdouble tempX = center.getX() + r * (cos(tempRad + rotate) + tempRad * sin(tempRad + rotate));
+				GLdouble tempY = center.getY() + r * (sin(tempRad + rotate) - tempRad * cos(tempRad + rotate));
+				glVertex2d(tempX, tempY);
+			}
+		}
+		glEnd();
 	}
 
 };
