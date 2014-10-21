@@ -14,6 +14,7 @@ class myCircle{
 	myPoint<T> center;
 	std::vector<myPoint<T>> nPoints;
 	T r;
+	GLint currentN;
 
 public:
 	
@@ -51,7 +52,9 @@ public:
 
 	void setR(T rhs)
 	{
+		split(currentN);
 		r = rhs;
+
 	}
 
 	void setCenterX(T rhs)
@@ -84,6 +87,7 @@ public:
 
 	//split the circle to n equals part
 	void inline split(GLint n){
+		currentN = n;
 		nPoints.clear();
 
 		for (int i = 0; i < n; i++){

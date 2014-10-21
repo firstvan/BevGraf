@@ -11,6 +11,7 @@ class mySlider{
 	myPoint<T> click;
 	std::vector<myPoint<T>> points;
 	GLint current = 0;
+	GLint start = 0, end = 0 , length = 0;
 
 
 public:
@@ -29,7 +30,6 @@ public:
 			part = pr;
 			click = p1;
 			T x = sqrt(p1.pointDis2(p2)) / part;
-			std::cout << x << std::endl;
 
 			if (rp2.getY() - rp1.getY() == 0){
 				for (int i = 1; i < part; i++){
@@ -42,6 +42,30 @@ public:
 				}
 			}
 			
+	}
+
+	mySlider<T>(myPoint<T> rp1, myPoint<T> rp2, T start, T end, T pr){
+		p1 = rp1;
+		p2 = rp2;
+		part = pr;
+		click = p1;
+		this.start = start;
+		this.end = end;
+		length = end - start;
+
+		T x = sqrt(p1.pointDis2(p2)) / part;
+
+		if (rp2.getY() - rp1.getY() == 0){
+			for (int i = 1; i < part; i++){
+				points.push_back(myPoint<T>(p1.getX() + i * x, p1.getY()));
+			}
+		}
+		else if (rp2.getX() - rp1.getX() == 0){
+			for (int i = 1; i < part; i++){
+				points.push_back(myPoint<T>(p1.getX(), p1.getY() + i * x));
+			}
+		}
+
 	}
 
 
@@ -156,7 +180,8 @@ public:
 			glVertex2d(p2.getX(), p2.getY());
 		glEnd();
 
-		glPointSize(5);
+		glPointSize(10);
+		glColor3f(0.0, 0.0, 1.0);
 		glBegin(GL_POINTS);
 			glVertex2d(click.getX(), click.getY());
 		glEnd();
