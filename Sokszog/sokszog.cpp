@@ -157,7 +157,7 @@ void playersDiagonal(){
 	p1a.clear();
 	for (int i = 0; i < p1h; i++)
 	{
-		GLdouble pointDist = degToRad(360 / (double)p1h);
+		GLdouble pointDist = degToRad(360) / (double)p1h;
 		GLdouble tempx = p1Center.getX() + r * cos(i * pointDist);
 		GLdouble tempy = p1Center.getY() + r * sin(i * pointDist);
 

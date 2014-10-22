@@ -3,16 +3,16 @@
 #include "Slider.hpp"
 #include "myCircle.hpp"
 
-typedef mySlider<GLdouble> Slider;
-typedef myPoint<GLdouble> Point;
+typedef mySlider<GLint> Slider;
+typedef myPoint<GLint> Point;
 
 GLint winW = 800, winH = 800;
 GLint dragged;
-myCircle<GLdouble> circle(400, 400, 25, 3);
+myCircle<GLdouble> circle(400, 400, 25, 1);
 GLint size = 3;
 Slider sliders[] = {Slider(Point(100, 150),Point(700, 150), 25, 250),
-					Slider(Point(100, 100),Point(700, 100)),
-					Slider(Point(100, 50), Point(700, 50), 3, 20,17)};
+					Slider(Point(100, 100),Point(700, 100), 50, 300),
+					Slider(Point(100, 50), Point(700, 50), 1, 20,17)};
 
 void init(){
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -30,7 +30,7 @@ void display(){
 
 	glColor3f(0.0, 1.0, 1.0);
 	circle.draw();
-	circle.drawDiagonals();
+	//circle.drawSplitted();
 	circle.drawEvolvent();
 
 	
@@ -72,6 +72,12 @@ void processMouseMotion(GLint xMouse, GLint yMouse){
 			GLint temp = sliders[dragged].getValue();
 			circle.setR(temp);
 		}
+
+		if (dragged == 1){
+			GLint temp = sliders[dragged].getValue();
+			circle.setT(temp);
+		}
+
 
 		if (dragged == 2){
 			GLint temp = sliders[dragged].getCurrentPosition();

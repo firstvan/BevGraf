@@ -90,7 +90,8 @@ public:
 			if (part == 0){
 				click.setX(rhs);
 				current = rhs;
-				value = (rhs - start) /((p2.getX() - p1.getX()) / (double)interval);
+				double x = std::round(static_cast<double>(click.getX() - p1.getX()) / ((p2.getX() -p1.getX()) / static_cast<double>(interval))) + start;
+				value = static_cast<T>(x);
 			}
 			else{
 				GLdouble mind = abs(p1.getX() - rhs);
@@ -117,7 +118,7 @@ public:
 				else if (elem == part + 1){
 					T temp = p2.getX();
 					click.setX(temp);
-					elem = part;
+					current = part;
 				}
 				else{
 					T temp = points[elem].getX();

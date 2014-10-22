@@ -13,9 +13,10 @@
 template<typename T>
 class myCircle{
 	myPoint<T> center;
-	std::vector<myPoint<T>> nPoints;
+	std::vector<myPoint<GLdouble>> nPoints;
 	T r;
 	int splt = 0;
+	int t = 50;
 
 
 public:
@@ -90,8 +91,10 @@ public:
 	void inline split(GLint n){
 		nPoints.clear();
 		splt = n;
+		std::cout << n << std::endl;
+		GLdouble tempSzog = degToRad(360) / static_cast<GLdouble>(n);
 		for (int i = 0; i < n; i++){
-			nPoints.push_back(myPoint<GLdouble>(center.getX() + r*cos(i* degToRad(360 / (double)n)), center.getY() + r*sin(i* degToRad(360 / (double)n))));
+			nPoints.push_back(myPoint<GLdouble>(center.getX() + r * cos(i * tempSzog), center.getY() + r * sin(i * tempSzog)));
 		}
 	}
 
@@ -116,7 +119,11 @@ public:
 	}
 
 	GLdouble static degToRad(GLint a){
-		return PI * a / 180;
+		return  a * (PI / (double)180);
+	}
+
+	void setT(int tempT){
+		t = tempT;
 	}
 
 	void inline drawEvolvent(){
@@ -125,9 +132,9 @@ public:
 
 		for (int j = 0; j < splt; j++)
 		{
-			GLdouble rotate = j * degToRad(360 / (double)splt);
+			GLdouble rotate = j * (degToRad(360) / static_cast<GLdouble>(splt));
 
-			for (int i = 0; i < 50; i++){
+			for (int i = 0; i < t; i++){
 				GLdouble tempRad = degToRad(i);
 				GLdouble tempX = center.getX() + r * (cos(tempRad + rotate) + tempRad * sin(tempRad + rotate));
 				GLdouble tempY = center.getY() + r * (sin(tempRad + rotate) - tempRad * cos(tempRad + rotate));
