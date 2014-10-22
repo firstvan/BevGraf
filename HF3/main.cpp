@@ -3,16 +3,20 @@
 #include "Slider.hpp"
 #include "myCircle.hpp"
 
-typedef mySlider<GLint> Slider;
-typedef myPoint<GLint> Point;
+
+
+typedef mySlider<GLdouble> Slider;
+typedef myPoint<GLdouble> Point;
 
 GLint winW = 800, winH = 800;
 GLint dragged;
-myCircle<GLdouble> circle(400, 400, 25, 1);
+myCircle<GLdouble> circle(400, 400, 0, 1);
 GLint size = 3;
-Slider sliders[] = {Slider(Point(100, 150),Point(700, 150), 25, 250),
-					Slider(Point(100, 100),Point(700, 100), 50, 300),
-					Slider(Point(100, 50), Point(700, 50), 1, 20,17)};
+GLdouble tenpi = 180 * 10;
+Slider sliders[] = {
+					Slider(Point(100, 150), Point(700, 150), 1, 30, 29),
+					Slider(Point(100, 100),Point(700, 100), 0, 1800),
+					Slider(Point(100, 50), Point(700, 50), 0, 100)};
 
 void init(){
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -68,7 +72,7 @@ void processMouseMotion(GLint xMouse, GLint yMouse){
 	if (dragged > -1){
 		sliders[dragged].setClickX(xMouse);
 		sliders[dragged].setClickY(winH - yMouse);
-		if (dragged == 0){
+		if (dragged == 2){
 			GLint temp = sliders[dragged].getValue();
 			circle.setR(temp);
 		}
@@ -79,7 +83,7 @@ void processMouseMotion(GLint xMouse, GLint yMouse){
 		}
 
 
-		if (dragged == 2){
+		if (dragged == 0){
 			GLint temp = sliders[dragged].getCurrentPosition();
 			circle.split(temp);
 		}

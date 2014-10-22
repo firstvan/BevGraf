@@ -16,7 +16,7 @@ class myCircle{
 	std::vector<myPoint<GLdouble>> nPoints;
 	T r;
 	int splt = 0;
-	int t = 50;
+	int t = 0;
 
 
 public:
@@ -128,20 +128,20 @@ public:
 
 	void inline drawEvolvent(){
 		glPointSize(1);
-		glBegin(GL_POINTS);
-
+		
 		for (int j = 0; j < splt; j++)
 		{
 			GLdouble rotate = j * (degToRad(360) / static_cast<GLdouble>(splt));
-
+			glBegin(GL_LINE_STRIP);
 			for (int i = 0; i < t; i++){
 				GLdouble tempRad = degToRad(i);
 				GLdouble tempX = center.getX() + r * (cos(tempRad + rotate) + tempRad * sin(tempRad + rotate));
 				GLdouble tempY = center.getY() + r * (sin(tempRad + rotate) - tempRad * cos(tempRad + rotate));
 				glVertex2d(tempX, tempY);
 			}
+
+			glEnd();
 		}
-		glEnd();
 	}
 
 };
