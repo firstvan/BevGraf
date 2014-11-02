@@ -91,7 +91,7 @@ public:
 	void inline split(GLint n){
 		nPoints.clear();
 		splt = n;
-		std::cout << n << std::endl;
+
 		GLdouble tempSzog = degToRad(360) / static_cast<GLdouble>(n);
 		for (int i = 0; i < n; i++){
 			nPoints.push_back(myPoint<GLdouble>(center.getX() + r * cos(i * tempSzog), center.getY() + r * sin(i * tempSzog)));

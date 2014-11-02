@@ -5,8 +5,8 @@
 
 
 
-typedef mySlider<GLdouble> Slider;
-typedef myPoint<GLdouble> Point;
+typedef mySlider<GLint> Slider;
+typedef myPoint<GLint> Point;
 
 GLint winW = 800, winH = 800;
 GLint dragged;

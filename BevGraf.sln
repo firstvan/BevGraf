@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HF3", "HF3\HF3.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SliderTeszt", "SliderTeszt\SliderTeszt.vcxproj", "{801C5152-0BD6-44A3-8047-0A03BB26D780}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HF4", "HF4\HF4.vcxproj", "{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,16 @@ Global
 		{801C5152-0BD6-44A3-8047-0A03BB26D780}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{801C5152-0BD6-44A3-8047-0A03BB26D780}.Release|Win32.ActiveCfg = Release|Win32
 		{801C5152-0BD6-44A3-8047-0A03BB26D780}.Release|Win32.Build.0 = Release|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Debug|Win32.Build.0 = Debug|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Release|Any CPU.ActiveCfg = Release|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Release|Win32.ActiveCfg = Release|Win32
+		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

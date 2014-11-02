@@ -55,16 +55,16 @@ public:
 		end = nd;
 		interval = end - start;
 
-		T x = sqrt(p1.pointDis2(p2)) / part;
+		GLdouble x = static_cast<GLdouble>(sqrt(p1.pointDis2(p2)) / part);
 
 		if (rp2.getY() - rp1.getY() == 0){
 			for (int i = 1; i < part; i++){
-				points.push_back(myPoint<T>(p1.getX() + i * x, p1.getY()));
+				points.push_back(myPoint<T>(static_cast<T>(p1.getX() + i * x), p1.getY()));
 			}
 		}
 		else if (rp2.getX() - rp1.getX() == 0){
 			for (int i = 1; i < part; i++){
-				points.push_back(myPoint<T>(p1.getX(), p1.getY() + i * x));
+				points.push_back(myPoint<T>(p1.getX(), static_cast<T>(p1.getY() + i * x)));
 			}
 		}
 
@@ -89,7 +89,7 @@ public:
 		{
 			if (part == 0){
 				click.setX(rhs);
-				current = rhs;
+				current = static_cast<GLint>(rhs);
 				double x = std::round(static_cast<double>(click.getX() - p1.getX()) / ((p2.getX() -p1.getX()) / static_cast<double>(interval))) + start;
 				value = static_cast<T>(x);
 			}
@@ -99,7 +99,7 @@ public:
 
 				if (mind > abs(p2.getX() - rhs)){
 					mind = abs(p2.getX() - rhs);
-					elem = part + 1;
+					elem = static_cast<GLint>(part + 1);
 				}
 
 				for (int i = 0; i < part - 1; i++){
@@ -135,7 +135,7 @@ public:
 			if (part == 0){
 				click.setY(rhs);
 				current = rhs;
-				value = rhs - (start / ((p2.getY() - p1.getY()) / (double)interval));
+				value = static_cast<GLint>(rhs - (start / ((p2.getY() - p1.getY()) / static_cast<GLdouble>(interval))));
 			}
 			else{
 				GLdouble mind = abs(p1.getY() - rhs);
