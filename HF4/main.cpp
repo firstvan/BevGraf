@@ -65,12 +65,24 @@ void updatematrix()
 	N.setElement(0, 3, 3.0 * tParams[0] * tParams[0]);
 	N.setElement(1, 3, 2.0 * tParams[0]);
 	N.setElement(2, 3, 1.0);
-	N.setElement(2, 3, 0.0);
+	N.setElement(3, 3, 0.0);
 
 	// we need inverse of all this
 	M = N.inverse();
 }
 
+void erinto()
+{
+	T.setElement(0, 0, 3.0 * tParams[2] * tParams[2]);
+	T.setElement(1, 0, 2.0 * tParams[2]);
+	T.setElement(2, 0, 1.0);
+	T.setElement(3, 0, 0.0);
+
+	Q = G * M * T;
+	G1.setElement(0, 3, Q.getElement(0, 0));
+	G1.setElement(1, 3, Q.getElement(1, 0));
+
+}
 
 void init(){
 	glClearColor(1.0, 1.0, 1.0, 0.0);
@@ -82,6 +94,7 @@ void init(){
 	glEnable(GL_POINT_SMOOTH);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	updatematrix();
 
 	G.setElement(2, 0, 1.0);
@@ -134,7 +147,22 @@ void display(){
 
 		glVertex2d(Q.getElement(0, 0), Q.getElement(1, 0));
 	}
-	glVertex2d(points[2].getX(), points[2].getY());
+
+	C = G1 * M;
+	for (GLdouble tl = tParams[0]; tl <= tParams[2]; tl += 0.01f)
+	{
+		T.setElement(0, 0, (tl * tl * tl));
+		T.setElement(1, 0, (tl * tl));
+		T.setElement(2, 0, (tl));
+		T.setElement(3, 0, 1.0);
+
+		Q = C * T;
+
+		glVertex2d(Q.getElement(0, 0), Q.getElement(1, 0));
+	}
+
+
+	glVertex2d(points[4].getX(), points[4].getY());
 	glEnd();
 
 
@@ -220,18 +248,31 @@ void processMouseMotion(GLint xMouse, GLint yMouse){
 			G.setElement(1, dragged, points[dragged].getY());
 			irany.setX(points[0].getX() + draggedX);
 			irany.setY(points[0].getY() + draggedY);
+			erinto();
 			break;
 		case 1:
+			points[dragged].setX(static_cast<GLdouble>(xMouse));
+			points[dragged].setY(static_cast<GLdouble>(winH - yMouse));
+			G.setElement(0, dragged, points[dragged].getX());
+			G.setElement(1, dragged, points[dragged].getY());
+			erinto();
+			break;
 		case 2:
 			points[dragged].setX(static_cast<GLdouble>(xMouse));
 			points[dragged].setY(static_cast<GLdouble>(winH - yMouse));
 			G.setElement(0, dragged, points[dragged].getX());
 			G.setElement(1, dragged, points[dragged].getY());
+			G1.setElement(0, 0, points[dragged].getX());
+			G1.setElement(1, 0, points[dragged].getY());
+			erinto();
 			break;
 		case 3:
 		case 4:
 			points[dragged].setX(static_cast<GLdouble>(xMouse));
 			points[dragged].setY(static_cast<GLdouble>(winH - yMouse));
+			G1.setElement(0, dragged - 2, points[dragged].getX());
+			G1.setElement(1, dragged - 2, points[dragged].getY());
+			erinto();
 			break;
 		case 10:
 			irany.setX(static_cast<GLdouble>(xMouse));
@@ -239,21 +280,26 @@ void processMouseMotion(GLint xMouse, GLint yMouse){
 
 			G.setElement(0, 3, irany.getX() - points[0].getX());
 			G.setElement(1, 3, irany.getY() - points[0].getY());
+			erinto();
+
 			break;
 		case 11:
 			sl1.setClickX(0, xMouse);
 			tParams[0] = sl1.getValue(0);
 			updatematrix();
+			erinto();
 			break;
 		case 12:
 			sl1.setClickX(1, xMouse);
 			tParams[1] = sl1.getValue(1);
 			updatematrix();
+			erinto();
 			break;
 		case 13:
 			sl1.setClickX(2, xMouse);
 			tParams[2] = sl1.getValue(2);
 			updatematrix();
+			erinto();
 			break;
 
 		}
