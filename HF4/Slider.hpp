@@ -8,11 +8,12 @@ class mySlider{
 	myPoint<T> p1;
 	myPoint<T> p2;
 	T part;
-	myPoint<T> click;
+	myPoint<T> clicks[3];
 	std::vector<myPoint<T>> points;
 	GLint current = 0;
 	T start = 0, end = 0, interval = 0;
-	T value = 0;
+	T value[3];
+	
 
 
 public:
@@ -25,32 +26,10 @@ public:
 		click = new myPoint();
 	}
 
-	mySlider<T>(myPoint<T> rp1, myPoint<T> rp2, T pr = 0){
-			p1 = rp1;
-			p2 = rp2;
-			part = pr;
-			click = p1;
-			T x = sqrt(p1.pointDis2(p2)) / part;
-		
-
-			if (rp2.getY() - rp1.getY() == 0){
-				for (int i = 1; i < part; i++){
-					points.push_back(myPoint<T>(p1.getX() + i * x, p1.getY()));
-				}
-			}
-			else if (rp2.getX() - rp1.getX() == 0){
-				for (int i = 1; i < part; i++){
-					points.push_back(myPoint<T>(p1.getX() , p1.getY() + i * x));
-				}
-			}
-			
-	}
-
 	mySlider<T>(myPoint<T> rp1, myPoint<T> rp2, T strt, T nd, T pr = 0){
 		p1 = rp1;
 		p2 = rp2;
 		part = pr;
-		click = p1;
 		start = strt;
 		end = nd;
 		interval = end - start;
@@ -68,115 +47,44 @@ public:
 			}
 		}
 
+		clicks[0] = myPoint<T>(p1.getX() + x, p1.getY());
+		clicks[1] = myPoint<T>(p1.getX() + 2 * x, p1.getY());
+		clicks[2] = myPoint<T>(p1.getX() + 3 * x, p1.getY());
+
+		value[0] = -1;
+		value[1] = 0;
+		value[2] = 1;
+
 	}
 
-
-
-	myPoint<T> getClick() const{
-		return click;
+	myPoint<T> getClick(int w) const{
+		return clicks[w];
 	}
 
-	GLint getCurrentPosition(){
+	GLint getCurrentPosition(int w){
 		return current + start;
 	}
 
-	T getValue(){
-		return value;
+	T getValue(int w){
+		return value[w];
 	}
 
-	void setClickX(T rhs){
-		if (rhs > p1.getX() && rhs < p2.getX())
+	void setClickX(int w, T rhs){
+		if (rhs > p1.getX() && p2.getX() > rhs)
 		{
-			if (part == 0){
-				click.setX(rhs);
-				current = static_cast<GLint>(rhs);
-				double x = std::round(static_cast<double>(click.getX() - p1.getX()) / ((p2.getX() -p1.getX()) / static_cast<double>(interval))) + start;
-				value = static_cast<T>(x);
-			}
-			else{
-				GLdouble mind = abs(p1.getX() - rhs);
-				GLint elem = -1;
-
-				if (mind > abs(p2.getX() - rhs)){
-					mind = abs(p2.getX() - rhs);
-					elem = static_cast<GLint>(part + 1);
-				}
-
-				for (int i = 0; i < part - 1; i++){
-					if (mind > abs(points[i].getX() - rhs)){
-						mind = abs(points[i].getX() - rhs);
-						elem = i;
-					}
-				}
-
-				if (elem == -1)
-				{
-					T temp = p1.getX();
-					click.setX(temp);
-					current = 0;
-				}
-				else if (elem == part + 1){
-					T temp = p2.getX();
-					click.setX(temp);
-					current = part;
-				}
-				else{
-					T temp = points[elem].getX();
-					click.setX(temp);
-					current = elem + 1;
-				}
-			}
+			clicks[w].setX(rhs);
+			double x = (static_cast<double>(clicks[w].getX() - p1.getX()) / ((p2.getX() - p1.getX()) / static_cast<double>(interval))) + start;
+			value[w] = x;
 		}
 	}
 	
-	void setClickY(T rhs){
-		if (rhs > p1.getY() && rhs < p2.getY())
-		{
-			if (part == 0){
-				click.setY(rhs);
-				current = rhs;
-				value = static_cast<GLint>(rhs - (start / ((p2.getY() - p1.getY()) / static_cast<GLdouble>(interval))));
-			}
-			else{
-				GLdouble mind = abs(p1.getY() - rhs);
-				GLint elem = -1;
 
-				if (mind > abs(p2.getY() - rhs)){
-					mind = abs(p2.getY() - rhs);
-					elem = part + 1;
-				}
-
-				for (int i = 0; i < part - 1; i++){
-					if (mind > abs(points[i].getY() - rhs)){
-						mind = abs(points[i].getY() - rhs);
-						elem = i;
-					}
-				}
-
-				if (elem == -1)
-				{
-					T temp = p1.getY();
-					click.setY(temp);
-					current = 0;
-				}
-				else if (elem == part + 1){
-					T temp = p2.getY();
-					click.setY(temp);
-					elem = part;
-				}
-				else{
-					T temp = points[elem].getY();
-					click.setY(temp);
-					current = elem + 1;
-				}
-			}
-		}
-	}
 
 	void inline draw(){
 		
 		if (part > 1){
-			glPointSize(3);
+			glPointSize(10);
+			glColor3d(0.0, 0.0, 0.0);
 			glBegin(GL_POINTS);
 			for (int i = 0; i < part-1; i++){
 				glVertex2d(points[i].getX(), points[i].getY());
@@ -185,7 +93,8 @@ public:
 			
 		}
 		
-		glPointSize(3);
+		glPointSize(10);
+		glColor3d(0.0, 0.0, 0.0);
 		glBegin(GL_POINTS);
 			glVertex2d(p1.getX(), p1.getY());
 			glVertex2d(p2.getX(), p2.getY());
@@ -197,13 +106,16 @@ public:
 		glEnd();
 
 		glColor3f(0.0, 0.0, 1.0);
-		glPointSize(10);
+		glPointSize(5);
 		glBegin(GL_POINTS);
-			glVertex2d(click.getX(), click.getY());
+		for (int i = 0; i < 3; i++)
+		{
+			glVertex2d(clicks[i].getX(), clicks[i].getY());
+		}
 		glEnd();
 	}
 
-	GLdouble dis2Click(T a1, T a2){
-		return (a1 - click.getX()) * (a1 - click.getX()) + (a2 - click.getY()) * (a2 - click.getY());
+	GLdouble dis2Click(T a1, T a2, int w){
+		return (a1 - clicks[w].getX()) * (a1 - clicks[w].getX()) + (a2 - clicks[w].getY()) * (a2 - clicks[w].getY());
 	}
 };
