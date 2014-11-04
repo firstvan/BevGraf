@@ -1,4 +1,4 @@
-#include <GL/glut.h>
+﻿#include <GL/glut.h>
 #include <iostream>
 #include "point.hpp"
 #include "Slider.hpp"
@@ -7,44 +7,31 @@
 
 typedef myPoint<GLdouble> MYPOINT;
 
-GLint winW = 800, winH = 800;
-GLint dragged = -1;
-GLdouble draggedX = 0, draggedY = 0;
-GLint size = 5;
-
-//init points
-MYPOINT irany(300, 550);
-MYPOINT points[] = {
-	MYPOINT(100, 150),
-	MYPOINT(300, 350),
-	MYPOINT(500, 400),
+GLint winW = 800, winH = 800;	//ablakméret
+GLint dragged = -1;				//egérkezelés
+GLdouble draggedX = 0, draggedY = 0;	//erintő vektor mozgatása a p0 pont mozgatására
+GLint size = 5;					//pontok mérete
+MYPOINT irany(200, 200);		//érintő végső pontja
+MYPOINT points[] = {			//pontok
+	MYPOINT(100, 100),
+	MYPOINT(200, 250),
+	MYPOINT(300, 200),
 	MYPOINT(600, 300),
 	MYPOINT(700, 600) };
-
-
-MYPOINT r1(irany.getX() - points[0].getX(), irany.getY() - points[0].getY());
-
-Matrix<4, 3, GLdouble> G;
-Matrix<4, 3, GLdouble> G1;
-
-//init T - s
-GLdouble tParams[3] = { -1.0f, 0.0f, 1.0f };
-
-
-
-Matrix<4, 4, GLdouble> N;
-Matrix<4, 4, GLdouble> M;
-
-
-Matrix<1, 4, GLdouble> T;
+MYPOINT r1(irany.getX() - points[0].getX(), irany.getY() - points[0].getY());		//érintő vektora
+Matrix<4, 3, GLdouble> G;		//első 3 geometriai pontot tartalmazó mátrix, amely 90 fokos elforgatással van, elsődleges cél a könnyebb feltölthetőség	
+Matrix<4, 3, GLdouble> G1;		//második 3 g.pont...
+GLdouble tParams[3] = { -1.0, 0.0, 1.0 };	//paraméterek
+Matrix<4, 4, GLdouble> N;		//segédmátrix
+Matrix<4, 4, GLdouble> M;		
+Matrix<1, 4, GLdouble> T;		//t-k vektora csak itt is leforgatás
 Matrix<1, 3, GLdouble> Q;
+MYPOINT sp1(50, 50);		//slider kezdőpontja
+MYPOINT sp2(700, 50);		//slider végpontja
+mySlider<GLdouble> sl1(sp1, sp2, (-2.0), 2.0, 4 );		//slider
 
-
-MYPOINT sp1(50, 50);
-MYPOINT sp2(700, 50);
-mySlider<GLdouble> sl1(sp1, sp2, (-2.0), 2.0, 4 );
-
-void updatematrix()
+//M mátrix újraszámolása megváltozott paraméterekhez
+void gUjraszamol()
 {
 	N.setElement(0, 0, tParams[0] * tParams[0] * tParams[0]);
 	N.setElement(1, 0, tParams[0] * tParams[0]);
@@ -61,16 +48,17 @@ void updatematrix()
 	N.setElement(2, 2, tParams[2]);
 	N.setElement(3, 2, 1.0);
 
-	// derivative for tangent
 	N.setElement(0, 3, 3.0 * tParams[0] * tParams[0]);
 	N.setElement(1, 3, 2.0 * tParams[0]);
 	N.setElement(2, 3, 1.0);
 	N.setElement(3, 3, 0.0);
 
-	// we need inverse of all this
+
 	M = N.inverse();
 }
 
+
+//a második 3 pont érintőjének újraszámolásához
 void erinto()
 {
 	T.setElement(0, 0, 3.0 * tParams[2] * tParams[2]);
@@ -84,6 +72,7 @@ void erinto()
 
 }
 
+
 void init(){
 	glClearColor(1.0, 1.0, 1.0, 0.0);
 	glMatrixMode(GL_PROJECTION);
@@ -94,8 +83,8 @@ void init(){
 	glEnable(GL_POINT_SMOOTH);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	updatematrix();
+	//init g és g1 mátrix	
+	gUjraszamol();
 
 	G.setElement(2, 0, 1.0);
 	G.setElement(2, 1, 1.0);
@@ -134,13 +123,13 @@ void display(){
 	
 	glBegin(GL_LINE_STRIP);
 
-
+	// görbe kirajzoltatása
 	Matrix<4, 3, GLdouble > C = G * M;
-	for (GLdouble tl = tParams[0]; tl <= tParams[2]; tl += 0.01f)
+	for (GLdouble t = tParams[0]; t <= tParams[2]; t += 0.01)
 	{
-		T.setElement(0, 0, (tl * tl * tl));
-		T.setElement(1, 0, (tl * tl));
-		T.setElement(2, 0, (tl));
+		T.setElement(0, 0, (t * t * t));
+		T.setElement(1, 0, (t * t));
+		T.setElement(2, 0, (t));
 		T.setElement(3, 0, 1.0);
 
 		Q = C * T;
@@ -149,11 +138,11 @@ void display(){
 	}
 
 	C = G1 * M;
-	for (GLdouble tl = tParams[0]; tl <= tParams[2]; tl += 0.01f)
+	for (GLdouble t = tParams[0]; t <= tParams[2]; t += 0.01)
 	{
-		T.setElement(0, 0, (tl * tl * tl));
-		T.setElement(1, 0, (tl * tl));
-		T.setElement(2, 0, (tl));
+		T.setElement(0, 0, (t * t * t));
+		T.setElement(1, 0, (t * t));
+		T.setElement(2, 0, (t));
 		T.setElement(3, 0, 1.0);
 
 		Q = C * T;
@@ -177,7 +166,7 @@ void display(){
 
 
 	glColor3d(0.0, 0.0, 0.0);
-	for (size_t i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		points[i].display();
 	}
@@ -286,19 +275,19 @@ void processMouseMotion(GLint xMouse, GLint yMouse){
 		case 11:
 			sl1.setClickX(0, xMouse);
 			tParams[0] = sl1.getValue(0);
-			updatematrix();
+			gUjraszamol();
 			erinto();
 			break;
 		case 12:
 			sl1.setClickX(1, xMouse);
 			tParams[1] = sl1.getValue(1);
-			updatematrix();
+			gUjraszamol();
 			erinto();
 			break;
 		case 13:
 			sl1.setClickX(2, xMouse);
 			tParams[2] = sl1.getValue(2);
-			updatematrix();
+			gUjraszamol();
 			erinto();
 			break;
 
