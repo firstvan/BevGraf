@@ -2,6 +2,9 @@
 #define MYMATRIX_HPP
 
 #include <vector>
+#include <math.h>
+
+#define PI	3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
 
 template<typename T>
@@ -18,6 +21,7 @@ class myMatrix
             matrix[i].resize(m);
         }
     }
+
 public:
 
     myMatrix() {}
@@ -58,6 +62,47 @@ public:
         }
     }
 
+    myMatrix(char type, GLdouble v1, GLdouble v2 = 0)
+    {
+        n = 3;
+        m = 3;
+
+        resize();
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (i == j)
+                    matrix[i][j] = 1;
+                else
+                    matrix[i][j] = 0;
+            }
+        }
+
+        switch (type)
+        {
+        case 'E':
+            matrix[0][2] = v1;
+            matrix[1][2] = v2;
+            break;
+        case 'S':
+            matrix[0][0] = v1;
+            matrix[1][1] = v2;
+            break;
+        case 'F':
+            GLdouble tempRad = v1 * ( PI / (double)180);
+            matrix[0][0] = cos(tempRad);
+            matrix[0][1] = -sin(tempRad);
+            matrix[1][0] = sin(tempRad);
+            matrix[1][1] = cos(tempRad);
+            break;
+
+        }
+    }
+
+
+
     void setElement(int r_n, int r_m, T value)
     {
         matrix[r_n][r_m] = value;
@@ -91,7 +136,7 @@ public:
         return *this;
     }
 
-    void kiir()
+    virtual void kiir() const
     {
         for (int i = 0; i < n; i++)
         {

@@ -2,12 +2,19 @@
 #include <iostream>
 #include "point.hpp"
 #include "myMatrix.hpp"
+#include "myCircle.hpp"
+
 
 GLint winW = 720, winH = 720;
 
 typedef myPoint<GLdouble> MYPOINT;
 typedef myMatrix<GLdouble> MYMATRIX;
 
+MYPOINT center(360, 360);
+
+myCircle<GLdouble> k(center, 30, 5);
+
+std::vector<MYPOINT> k1 = k.getDiagonalPoints();
 
 
 
@@ -30,7 +37,6 @@ void init()
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-
 
 
 }
