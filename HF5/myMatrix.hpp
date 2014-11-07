@@ -34,7 +34,7 @@ public:
         rs();
     }
 
-    myMatrix(int r_n, int r_m, char a, double b)
+    myMatrix(int r_n, int r_m)
     {
         n = r_n;
         m = r_m;
@@ -287,7 +287,7 @@ public:
 
     myMatrix<T> operator*(const myMatrix<T>& rhs)
     {
-        myMatrix<T> temp(n, rhs.getM(), '0', 0);
+        myMatrix<T> temp(n, rhs.getM());
 
         for (int i = 0; i < n; i++)
         {
