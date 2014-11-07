@@ -13,7 +13,7 @@ class myMatrix
     int n, m;
     std::vector<std::vector<T>> matrix;
 
-    void resize()
+    void rs()
     {
         matrix.resize(n);
         for (int i = 0; i < n; i++)
@@ -31,15 +31,24 @@ public:
         n = r_nm;
         m = r_nm;
 
-        resize();
+        rs();
     }
+
+    myMatrix(int r_n, int r_m, char a, double b)
+    {
+        n = r_n;
+        m = r_m;
+
+        rs();
+    }
+
 
     myMatrix(int r_n, int r_m, std::vector<std::vector<T>> rhs_matrix)
     {
         n = r_n;
         m = r_m;
 
-        resize();
+        rs();
 
         matrix = rhs_matrix;
 
@@ -51,13 +60,13 @@ public:
         n = r_n;
         m = r_m;
 
-        resize();
-
+        rs();
+        int k = 0;
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < m; j++)
             {
-                matrix[i][j] = vector[i * n + j];
+                matrix[i][j] = vector[k++];
             }
         }
     }
@@ -67,7 +76,7 @@ public:
         n = 3;
         m = 3;
 
-        resize();
+        rs();
 
         for (int i = 0; i < n; i++)
         {
@@ -275,9 +284,10 @@ public:
         return inv;
     }
 
+
     myMatrix<T> operator*(const myMatrix<T>& rhs)
     {
-        myMatrix<T> temp(n);
+        myMatrix<T> temp(n, rhs.getM(), '0', 0);
 
         for (int i = 0; i < n; i++)
         {
@@ -295,6 +305,7 @@ public:
 
         return temp;
     }
+
 };
 
 

@@ -65,10 +65,6 @@ public:
         r = rhs;
     }
 
-    std::vector<myPoint<GLdouble>> getDiagonalPoints const
-    {
-        return nPoints;
-    }
 
     //draw the circle
     void inline draw()
