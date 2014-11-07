@@ -14,8 +14,8 @@ MYPOINT center(360, 360);
 
 int s = 6;
 
-myStar smallStar(center, 25, 100, s);
-myStar bigStar(center, 100, 150, s, 20);
+myStar smallStar(center, 30, 100, s);
+myStar bigStar(center, 100, 130, s, 20);
 
 MYMATRIX e1('E', -1 * center.getX(), -1 * center.getY());
 MYMATRIX f1('F', 1.0);
@@ -39,6 +39,7 @@ void init()
     glEnable(GL_POINT_SMOOTH);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glLineWidth(2);
 
 }
 
@@ -56,7 +57,7 @@ void display()
     glColor3d(1.0, 0.0, 0.0);
     smallStar.draw();
 
-    glColor3d(1.0, 0.0, 1.0);
+    glColor3d(0.0, 0.0, 1.0);
     bigStar.draw();
 
 
@@ -102,7 +103,7 @@ void update(int n)
         GLdouble temp[3] = { bigStar.getElement(1, i).getX(), bigStar.getElement(1, i).getY(), 1 };
 
         MYMATRIX m(3, 1, temp);
-        m = transform1 * m;
+        m = transform2 * m;
         bigStar.setElement(1, i, m.getElement(0, 0), m.getElement(1, 0));
 
         temp[0] = bigStar.getElement(2, i).getX();
@@ -110,7 +111,7 @@ void update(int n)
         temp[2] = 1;
 
         MYMATRIX m1(3, 1, temp);
-        m1 = transform1 * m1;
+        m1 = transform2 * m1;
 
         bigStar.setElement(2, i, m1.getElement(0, 0), m1.getElement(1, 0));
     }
