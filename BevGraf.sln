@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SliderTeszt", "SliderTeszt\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HF4", "HF4\HF4.vcxproj", "{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HF5", "HF5\HF5.vcxproj", "{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,16 @@ Global
 		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Release|Win32.ActiveCfg = Release|Win32
 		{36EC13B0-D17E-4C02-AF8D-F8E13A1BA7DB}.Release|Win32.Build.0 = Release|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Debug|Win32.Build.0 = Debug|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Release|Any CPU.ActiveCfg = Release|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Release|Win32.ActiveCfg = Release|Win32
+		{535FB8CE-259C-4BE5-BBD1-C29F1C2C0C2D}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
