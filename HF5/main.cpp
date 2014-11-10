@@ -17,6 +17,7 @@ int s = 6;
 myStar smallStar(center, 30, 100, s);
 myStar bigStar(center, 100, 130, s, 20);
 
+//Tranzformációs mátrixok inicializásása 'E' eltolás, 'F' elforgatás alfa fokkal, 'S' skálázás
 MYMATRIX e1('E', -1 * center.getX(), -1 * center.getY());
 MYMATRIX f1('F', 1.0);
 MYMATRIX f2('F', -1.0);
@@ -24,6 +25,7 @@ MYMATRIX sk('S', 0.995, 0.995);
 MYMATRIX sn('S', 1.005, 1.005);
 MYMATRIX e2('E', center.getX(), center.getY());
 
+//Végbemenő tranzformációs mátrixok, fontos a mátrix szorzás betartlása !! AxB*BxC
 MYMATRIX transform1 = e2 * sn * f1 * e1;
 MYMATRIX transform2 = e2 * sn * f2 * e1;
 
@@ -80,6 +82,7 @@ void update(int n)
         fok = 0;
     }
 
+    //kiscsillag pontjaira a tranzformáció
     for (int i = 0; i < s; i++)
     {
         GLdouble temp[3] = { smallStar.getElement(1, i).getX(), smallStar.getElement(1, i).getY(), 1 };
@@ -88,6 +91,7 @@ void update(int n)
         m = transform1 * m;
         smallStar.setElement(1, i, m.getElement(0, 0), m.getElement(1, 0));
 
+        //kiscsillag homogén kordinátában
         temp[0] = smallStar.getElement(2, i).getX();
         temp[1] = smallStar.getElement(2, i).getY();
         temp[2] = 1;
@@ -98,6 +102,7 @@ void update(int n)
         smallStar.setElement(2, i, m1.getElement(0, 0), m1.getElement(1, 0));
     }
 
+    //nagycsillag pontjaira a tranzformáció
     for (int i = 0; i < s; i++)
     {
         GLdouble temp[3] = { bigStar.getElement(1, i).getX(), bigStar.getElement(1, i).getY(), 1 };
