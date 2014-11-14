@@ -19,11 +19,12 @@ public:
     {}
 
     //másoló konstruktor
-    myPoint(myPoint& rhs)
+    myPoint(const myPoint<T>& rhs)
     {
         x = rhs.getX();
         y = rhs.getY();
     }
+
 
 
     //x visszatérítése

@@ -134,9 +134,9 @@ public:
 
     myMatrix<T>& operator*=(T skalar)
     {
-        for (int i = 0; i < M; i++)
+        for (int i = 0; i < m; i++)
         {
-            for (int j = 0; j < N; j++)
+            for (int j = 0; j < n; j++)
             {
                 matrix[j][i] *= skalar;
             }
