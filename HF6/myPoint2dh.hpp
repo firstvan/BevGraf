@@ -84,20 +84,20 @@ Point2DH<GLdouble> metszIlleszt(const Point2DH<GLdouble>& a, const Point2DH<GLdo
     return temp;
 }
 
-bool onTheSameSide(const Point2DH<GLdouble>& p1, const Point2DH<GLdouble>& p2, GLdouble a, GLdouble b, GLdouble c)
+bool onTheSameSide(const Point2DH<GLdouble>& p1, const Point2DH<GLdouble>& p2, const Point2DH<GLdouble>& e)
 {
-    Point2DH<GLdouble> pT = p1 * p2;
     GLdouble temp = 0;
+    GLdouble temp2 = 0;
 
-    temp = a * (pT.getX() / pT.getZ()) + b * (pT.getY() / pT.getZ()) + c;
+    temp = e.getX() * (p1.getX() / p1.getZ()) + e.getY() * (p1.getY() / p1.getZ()) + e.getZ();
+    temp2 = e.getX() * (p2.getX() / p2.getZ()) + e.getY() * (p2.getY() / p2.getZ()) + e.getZ();
 
-    std::cout << "a= " << temp << std::endl;
 
-    if (temp > 0)
+    if ( (temp * temp2) > 0)
     {
         return true;
     }
-    else if (temp < 0)
+    else
     {
         return false;
     }
