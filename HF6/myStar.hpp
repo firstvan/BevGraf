@@ -3,6 +3,8 @@
 
 #define PI	3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
+#include <math.h>
+
 class myStar
 {
     Point2DH<GLdouble> center;
@@ -112,7 +114,7 @@ public:
     {
         std::vector<Point2DH<GLdouble>> temp;
 
-        for (int i = 0; i < points1.size(); i++)
+        for (size_t i = 0; i < points1.size(); i++)
         {
             temp.emplace_back(points1[i]);
             temp.emplace_back(points2[i]);

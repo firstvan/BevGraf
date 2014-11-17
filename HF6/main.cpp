@@ -109,7 +109,7 @@ void display()
     }
 
     updateTess();
-    glColor3f(0.596, 0.984, 0.596);
+    glColor3d(0.596, 0.984, 0.596);
 
     gluTessBeginPolygon(tess, NULL);
     for (int i = 0; i < s; i++)
@@ -117,15 +117,15 @@ void display()
     gluTessEndPolygon(tess);
 
     t = bokor.cutWith(lencse1);
-    glColor3f(0.0, 0.39, 0.0);
+    glColor3d(0.0, 0.39, 0.0);
     t.draw(true);
 
     t = faKorona.cutWith(lencse1);
-    glColor3f(0.0, 0.39, 0.0);
+    glColor3d(0.0, 0.39, 0.0);
     t.draw(true);
 
     t = fa.cutWith(lencse1);
-    glColor3f(0.55, 0.27, 0.075);
+    glColor3d(0.55, 0.27, 0.075);
     t.draw(true);
 
     t = nap.cutWith(lencse1);
@@ -143,7 +143,7 @@ void display()
     }
 
     updateTess();
-    glColor3f(1.0, 0.84, 0.0);
+    glColor3d(1.0, 0.84, 0.0);
 
     gluTessBeginPolygon(tess, NULL);
     for (int i = 0; i < s; i++)
@@ -166,7 +166,7 @@ void display()
     }
 
     updateTess();
-    glColor3f(0.596, 0.984, 0.596);
+    glColor3d(0.596, 0.984, 0.596);
 
     gluTessBeginPolygon(tess, NULL);
     for (int i = 0; i < s; i++)
@@ -174,15 +174,15 @@ void display()
     gluTessEndPolygon(tess);
 
     t = bokor.cutWith(lencse2);
-    glColor3f(0.0, 0.39, 0.0);
+    glColor3d(0.0, 0.39, 0.0);
     t.draw(true);
 
     t = faKorona.cutWith(lencse2);
-    glColor3f(0.0, 0.39, 0.0);
+    glColor3d(0.0, 0.39, 0.0);
     t.draw(true);
 
     t = fa.cutWith(lencse2);
-    glColor3f(0.55, 0.27, 0.075);
+    glColor3d(0.55, 0.27, 0.075);
     t.draw(true);
 
     t = nap.cutWith(lencse2);
@@ -200,7 +200,7 @@ void display()
     }
 
     updateTess();
-    glColor3f(1.0, 0.84, 0.0);
+    glColor3d(1.0, 0.84, 0.0);
 
     gluTessBeginPolygon(tess, NULL);
     for (int i = 0; i < s; i++)
@@ -239,7 +239,7 @@ GLint getActivePoint2(myPoligon<GLdouble> p, GLint size, GLint sens, GLint xMous
                 draggedY[j] = lencse1[j].getY() - p[i].getY();
             }
 
-            for (size_t j = 0; j < lencse2.getSize(); j++)
+            for (int j = 0; j < lencse2.getSize(); j++)
             {
                 draggedX2[j] = lencse2[j].getX() - p[i].getX();
                 draggedY2[j] = lencse2[j].getY() - p[i].getY();
@@ -306,13 +306,13 @@ void processMouseMotion(GLint xMouse, GLint yMouse)
 
     if (move)
     {
-        for (size_t i = 0; i < lencse1.getSize(); i++)
+        for (int i = 0; i < lencse1.getSize(); i++)
         {
             lencse1[i].setX(xMouse + draggedX[i]);
             lencse1[i].setY(winH - yMouse + draggedY[i]);
         }
 
-        for (size_t i = 0; i < lencse2.getSize(); i++)
+        for (int i = 0; i < lencse2.getSize(); i++)
         {
             lencse2[i].setX(xMouse + draggedX2[i]);
             lencse2[i].setY(winH - yMouse + draggedY2[i]);
