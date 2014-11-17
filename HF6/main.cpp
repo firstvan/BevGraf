@@ -116,6 +116,14 @@ void display()
         gluTessVertex(tess, polygon1[i], polygon1[i]); // A poligont alkoto csucsokat rendre felsoroljuk.
     gluTessEndPolygon(tess);
 
+    for (int i = 0; i < s; i++)
+    {
+        delete[] polygon1[i];
+    }
+    delete[] polygon1;
+
+
+
     t = bokor.cutWith(lencse1);
     glColor3d(0.0, 0.39, 0.0);
     t.draw(true);
@@ -150,6 +158,11 @@ void display()
         gluTessVertex(tess, polygon1[i], polygon1[i]); // A poligont alkoto csucsokat rendre felsoroljuk.
     gluTessEndPolygon(tess);
 
+    for (int i = 0; i < s; i++)
+    {
+        delete[] polygon1[i];
+    }
+    delete[] polygon1;
 
     t = hegy.cutWith(lencse2);
     s = t.getSize();
@@ -172,6 +185,12 @@ void display()
     for (int i = 0; i < s; i++)
         gluTessVertex(tess, polygon1[i], polygon1[i]); // A poligont alkoto csucsokat rendre felsoroljuk.
     gluTessEndPolygon(tess);
+
+    for (int i = 0; i < s; i++)
+    {
+        delete[] polygon1[i];
+    }
+    delete[] polygon1;
 
     t = bokor.cutWith(lencse2);
     glColor3d(0.0, 0.39, 0.0);
@@ -206,6 +225,12 @@ void display()
     for (int i = 0; i < s; i++)
         gluTessVertex(tess, polygon1[i], polygon1[i]); // A poligont alkoto csucsokat rendre felsoroljuk.
     gluTessEndPolygon(tess);
+
+    for (int i = 0; i < s; i++)
+    {
+        delete[] polygon1[i];
+    }
+    delete[] polygon1;
 
     glutSwapBuffers();
 
