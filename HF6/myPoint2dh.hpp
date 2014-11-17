@@ -71,6 +71,13 @@ public:
 
         return temp;
     }
+
+    double pointDis2(T x1, T y1)
+    {
+        GLdouble retX = x - x1;
+        GLdouble retY = y - y1;
+        return (retX * retX + retY * retY);
+    }
 };
 
 
@@ -102,6 +109,10 @@ bool onTheSameSide(const Point2DH<GLdouble>& p1, const Point2DH<GLdouble>& p2, c
         return false;
     }
 }
+
+
+
+
 
 
 #endif

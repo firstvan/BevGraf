@@ -107,7 +107,21 @@ public:
             return points2[element];
         }
     }
+
+    std::vector<Point2DH<GLdouble>> getPoints()
+    {
+        std::vector<Point2DH<GLdouble>> temp;
+
+        for (int i = 0; i < points1.size(); i++)
+        {
+            temp.emplace_back(points1[i]);
+            temp.emplace_back(points2[i]);
+        }
+
+        return temp;
+    }
 };
+
 
 
 #endif MYSTAR_HPP
