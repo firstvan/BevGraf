@@ -5,6 +5,15 @@
 #include "myPolygon.hpp"
 #include "myStar.hpp"
 
+//tesselacio
+#ifndef WIN32
+typedef GLvoid(*CallBack)(...);
+#else
+typedef GLvoid(_stdcall *CallBack)();
+#endif
+
+GLUtesselator *tess; // A tesszelaciohoz szukseges mutato
+
 GLint winW = 1280, winH = 720;	//ablakméret
 GLint dragged = -1;				//egérkezelés
 GLint dragged2 = -1;
@@ -57,7 +66,13 @@ void init()
 
 }
 
-
+void updateTess(void)
+{
+    tess = gluNewTess();
+    gluTessCallback(tess, GLU_TESS_VERTEX, (CallBack)glVertex3dv);
+    gluTessCallback(tess, GLU_TESS_BEGIN, (CallBack)glBegin);
+    gluTessCallback(tess, GLU_TESS_END, (CallBack)glEnd);
+}
 
 void display()
 {
@@ -80,44 +95,117 @@ void display()
     glEnd();
     myPoligon<GLdouble> t = hegy.cutWith(lencse1);
 //hegy vágása
-    glColor4d(0.596, 0.984, 0.596,0.5);
-    t.draw(true);
+    int s = t.getSize();
+    GLdouble ** polygon1 = new GLdouble*[s];
+    for (int i = 0; i < s; i++)
+    {
+        polygon1[i] = new GLdouble[3];
+    }
+    for (int i = 0; i < s; i++)
+    {
+        polygon1[i][0] = t[i].getX();
+        polygon1[i][1] = t[i].getY();
+        polygon1[i][2] = 0;
+    }
+
+    updateTess();
+    glColor3f(0.596, 0.984, 0.596);
+
+    gluTessBeginPolygon(tess, NULL);
+    for (int i = 0; i < s; i++)
+        gluTessVertex(tess, polygon1[i], polygon1[i]); // A poligont alkoto csucsokat rendre felsoroljuk.
+    gluTessEndPolygon(tess);
 
     t = bokor.cutWith(lencse1);
-    glColor3d(0.0, 0.39, 0.0);
+    glColor3f(0.0, 0.39, 0.0);
     t.draw(true);
 
     t = faKorona.cutWith(lencse1);
-    glColor3d(0.0, 0.39, 0.0);
+    glColor3f(0.0, 0.39, 0.0);
     t.draw(true);
 
     t = fa.cutWith(lencse1);
-    glColor3d(0.55, 0.27, 0.075);
+    glColor3f(0.55, 0.27, 0.075);
     t.draw(true);
 
     t = nap.cutWith(lencse1);
-    glColor3d(1.0, 0.84, 0.0);
-    t.draw(true);
+    s = t.getSize();
+    polygon1 = new GLdouble*[s];
+    for (int i = 0; i < s; i++)
+    {
+        polygon1[i] = new GLdouble[3];
+    }
+    for (int i = 0; i < s; i++)
+    {
+        polygon1[i][0] = t[i].getX();
+        polygon1[i][1] = t[i].getY();
+        polygon1[i][2] = 0;
+    }
+
+    updateTess();
+    glColor3f(1.0, 0.84, 0.0);
+
+    gluTessBeginPolygon(tess, NULL);
+    for (int i = 0; i < s; i++)
+        gluTessVertex(tess, polygon1[i], polygon1[i]); // A poligont alkoto csucsokat rendre felsoroljuk.
+    gluTessEndPolygon(tess);
+
 
     t = hegy.cutWith(lencse2);
-    glColor4d(0.596, 0.984, 0.596, 0.5);
-    t.draw(true);
+    s = t.getSize();
+    polygon1 = new GLdouble*[s];
+    for (int i = 0; i < s; i++)
+    {
+        polygon1[i] = new GLdouble[3];
+    }
+    for (int i = 0; i < s; i++)
+    {
+        polygon1[i][0] = t[i].getX();
+        polygon1[i][1] = t[i].getY();
+        polygon1[i][2] = 0;
+    }
+
+    updateTess();
+    glColor3f(0.596, 0.984, 0.596);
+
+    gluTessBeginPolygon(tess, NULL);
+    for (int i = 0; i < s; i++)
+        gluTessVertex(tess, polygon1[i], polygon1[i]); // A poligont alkoto csucsokat rendre felsoroljuk.
+    gluTessEndPolygon(tess);
 
     t = bokor.cutWith(lencse2);
-    glColor3d(0.0, 0.39, 0.0);
+    glColor3f(0.0, 0.39, 0.0);
     t.draw(true);
 
     t = faKorona.cutWith(lencse2);
-    glColor3d(0.0, 0.39, 0.0);
+    glColor3f(0.0, 0.39, 0.0);
     t.draw(true);
 
     t = fa.cutWith(lencse2);
-    glColor3d(0.55, 0.27, 0.075);
+    glColor3f(0.55, 0.27, 0.075);
     t.draw(true);
 
     t = nap.cutWith(lencse2);
-    glColor3d(1.0, 0.84, 0.0);
-    t.draw(true);
+    s = t.getSize();
+    polygon1 = new GLdouble*[s];
+    for (int i = 0; i < s; i++)
+    {
+        polygon1[i] = new GLdouble[3];
+    }
+    for (int i = 0; i < s; i++)
+    {
+        polygon1[i][0] = t[i].getX();
+        polygon1[i][1] = t[i].getY();
+        polygon1[i][2] = 0;
+    }
+
+    updateTess();
+    glColor3f(1.0, 0.84, 0.0);
+
+    gluTessBeginPolygon(tess, NULL);
+    for (int i = 0; i < s; i++)
+        gluTessVertex(tess, polygon1[i], polygon1[i]); // A poligont alkoto csucsokat rendre felsoroljuk.
+    gluTessEndPolygon(tess);
 
     glutSwapBuffers();
 
