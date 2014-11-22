@@ -165,6 +165,7 @@ public:
 
         }
 
+        glColor3f(1.0, 0.0, 0.0);
         glBegin(GL_LINES);
         glVertex2d(p1.getX(),p1.getY());
         glVertex2d(p2.getX(), p2.getY());

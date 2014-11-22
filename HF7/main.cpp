@@ -10,7 +10,7 @@ GLsizei winWidth = 1280, winHeight = 720;
 std::vector<myPoint<GLdouble>> points;
 GLdouble e1, e2, e3, e4, e5;
 myPoint<GLdouble> temp;
-GLdouble t0 = 0.33;
+GLdouble t0 = 0.0;
 GLint dragged = -1;
 
 myPoint<GLdouble> str(280, 50);
@@ -157,13 +157,18 @@ void display()
     }
 
 
-    glColor3f(1.0, 0.0, 0.0);
 
-    glBegin(GL_POINTS);
-    for (auto p : points)
-        glVertex2d(p.getX(), p.getY());
-    glEnd();
+    for (int i = 0; i < points.size(); i++)
+    {
+        glColor3f(1.0, 0.0, 0.0);
 
+        if (i == 3 || i == 4 || i == 7)
+            glColor4f(1.0, 0.0, 0.0, 0.5);
+
+        glBegin(GL_POINTS);
+        glVertex2d(points[i].getX(), points[i].getY());
+        glEnd();
+    }
     sldr.draw();
 
     glutSwapBuffers( );
