@@ -1,6 +1,6 @@
 #include <GL/glut.h>
+#include <GL/freeglut_ext.h>
 #include <math.h>
-//#include "point.hpp"
 #include <vector>
 #include <iostream>
 #include "myMatrix.hpp"
@@ -32,12 +32,13 @@ myCube<GLdouble> cube;
 myCube<GLdouble> cube2;
 
 GLdouble dX = 20, dY = 50;
+GLdouble s=1.5;
 
 Matrix W("E");
 Matrix WR("E");
 Matrix W2("E");
 Matrix VM("Vm");
-Matrix VC("Vc", 1.5);
+Matrix VC("Vc", s);
 Matrix RX("Rx", dX);
 Matrix RY("Ry", dY);
 Matrix VMW;
@@ -47,8 +48,6 @@ Matrix temp;
 
 Matrix seged(4, 1);
 Matrix seged2(4, 1);
-
-
 
 
 void init()
@@ -190,8 +189,8 @@ void display()
 
     glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_LINES);
-    glVertex2d(600, 0);
-    glVertex2d(600, 720);
+    glVertex2d(640, 0);
+    glVertex2d(640, 720);
     glEnd();
 
     glutSwapBuffers();
@@ -219,7 +218,7 @@ void processMouseActiveMotion(GLint xMouse, GLint yMouse)
         GLdouble degx = (xMouse - originalx) / static_cast<GLdouble>(100);
         GLdouble degy = (winHeight - yMouse - originaly) / static_cast<GLdouble>(100);
 
-        RX.setDeg("Rx", degy);
+        RX.setDeg("Rx", -1 * degy);
         RY.setDeg("Ry", degx);
 
         temp = RX * RY;
@@ -263,8 +262,34 @@ void processMouseActiveMotion(GLint xMouse, GLint yMouse)
 
     }
 
+
     glutPostRedisplay();
 }
+
+void mouseWheel(int button, int dir, int x, int y)
+{
+    if (s >= 1.000 && s <= 10.000)
+        s -= (dir / static_cast<GLdouble>(10));
+
+    if (s < 1.000)
+    {
+        s = 1.000;
+    }
+    else if (s > 10.000)
+    {
+        s = 10.000;
+    }
+
+
+    VC.setElement(3, 2, (-1 / s));
+
+    VCW = W2 * VC;
+
+
+    glutPostRedisplay();
+    return;
+}
+
 
 int main(int argc, char** argv)
 {
@@ -276,6 +301,8 @@ int main(int argc, char** argv)
     glutDisplayFunc(display);
     glutMouseFunc(processMouse);
     glutMotionFunc(processMouseActiveMotion);
+    glutMouseWheelFunc(mouseWheel);
+
     glutMainLoop();
     return 0;
 }
