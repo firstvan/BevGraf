@@ -48,6 +48,15 @@ public:
         glVertex2d(data[3].x, data[3].y);
         glVertex2d(data[7].x, data[7].y);
         glEnd();
+
+        glColor3f(0.0, 0.0, 1.0);
+        glBegin(GL_POINTS);
+        for (int i = 0; i < 8; i++)
+        {
+            glVertex2d(data[i].x, data[i].y);
+        }
+        glEnd();
+
     }
 
 };

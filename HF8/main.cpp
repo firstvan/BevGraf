@@ -12,19 +12,19 @@ typedef myPoint4D<GLdouble> POINT4D;
 
 GLsizei winWidth = 1280, winHeight = 720;
 bool dragged = false;
-GLint originalx, originaly;
+GLint originalx, originaly, mouseX, mouseY;
 
 POINT4D A(-1, -1);
 POINT4D B(1, 1);
 
-POINT4D C(50, 50);
-POINT4D D(500, 500);
+POINT4D C(750, 50);
+POINT4D D(1200, 500);
 
 POINT4D A1(-1, -1);
 POINT4D B1(1, 1);
 
-POINT4D C1(750, 50);
-POINT4D D1(1200, 500);
+POINT4D C1(50, 50);
+POINT4D D1(500, 500);
 
 std::vector<POINT4D> cubePoints;
 std::vector<POINT4D> cubePoints2;
@@ -135,6 +135,9 @@ void display()
     glPointSize(5);
     glLineWidth(3);
 
+
+
+
     cube.data = cubePoints;
 
 
@@ -193,6 +196,20 @@ void display()
     glVertex2d(640, 720);
     glEnd();
 
+    if (dragged)
+    {
+        glColor3f(0.0, 0.0, 1.0);
+        glBegin(GL_POINTS);
+        glVertex2d(originalx, originaly);
+        glEnd();
+
+        glBegin(GL_LINES);
+        glVertex2d(originalx, originaly);
+        glVertex2d(mouseX, mouseY);
+        glEnd();
+
+    }
+
     glutSwapBuffers();
 }
 
@@ -207,6 +224,7 @@ void processMouse(GLint button, GLint action, GLint xMouse, GLint yMouse)
     if (button == GLUT_LEFT_BUTTON && action == GLUT_UP)
     {
         dragged = false;
+        glutPostRedisplay();
     }
 }
 
@@ -215,6 +233,8 @@ void processMouseActiveMotion(GLint xMouse, GLint yMouse)
 
     if (dragged)
     {
+        mouseX = xMouse;
+        mouseY = winHeight - yMouse;
         GLdouble degx = (xMouse - originalx) / static_cast<GLdouble>(100);
         GLdouble degy = (winHeight - yMouse - originaly) / static_cast<GLdouble>(100);
 
