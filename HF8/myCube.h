@@ -25,8 +25,20 @@ public:
             glVertex2d(data[i].x, data[i].y);
         }
         glEnd();
+        glBegin(GL_POINTS);
+        for (int i = 4; i < 8; i++)
+        {
+            glVertex2d(data[i].x, data[i].y);
+        }
+        glEnd();
 
         glBegin(GL_LINE_LOOP);
+        for (int i = 0; i < 4; i++)
+        {
+            glVertex2d(data[i].x, data[i].y);
+        }
+        glEnd();
+        glBegin(GL_POINTS);
         for (int i = 0; i < 4; i++)
         {
             glVertex2d(data[i].x, data[i].y);
@@ -49,13 +61,7 @@ public:
         glVertex2d(data[7].x, data[7].y);
         glEnd();
 
-        glColor3f(0.0, 0.0, 1.0);
-        glBegin(GL_POINTS);
-        for (int i = 0; i < 8; i++)
-        {
-            glVertex2d(data[i].x, data[i].y);
-        }
-        glEnd();
+
 
     }
 

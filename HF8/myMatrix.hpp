@@ -26,6 +26,7 @@ class myMatrix
     }
 
 public:
+    GLdouble alfa;
 
     myMatrix() {}
 
@@ -88,6 +89,7 @@ public:
 
         if (type == "Rx")
         {
+            alfa = v1;
             GLdouble tempRad = v1 * (PI / (double)180);
             matrix[1][1] = cos(tempRad);
             matrix[1][2] = -sin(tempRad);
@@ -96,6 +98,7 @@ public:
         }
         else if (type == "Ry")
         {
+            alfa = v1;
             GLdouble tempRad = v1 * (PI / (double)180);
             matrix[0][0] = cos(tempRad);
             matrix[0][2] = sin(tempRad);
@@ -135,6 +138,7 @@ public:
     {
         if (type == "Rx")
         {
+            alfa = value;
             GLdouble tempRad = value * (PI / (double)180);
             matrix[1][1] = cos(tempRad);
             matrix[1][2] = -sin(tempRad);
@@ -143,6 +147,7 @@ public:
         }
         else if (type == "Ry")
         {
+            alfa = value;
             GLdouble tempRad = value * (PI / (double)180);
             matrix[0][0] = cos(tempRad);
             matrix[0][2] = sin(tempRad);

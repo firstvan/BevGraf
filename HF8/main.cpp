@@ -31,8 +31,9 @@ std::vector<POINT4D> cubePoints2;
 myCube<GLdouble> cube;
 myCube<GLdouble> cube2;
 
-GLdouble dX = 20, dY = 50;
+GLdouble dX = 0, dY = 0;
 GLdouble s=1.5;
+GLdouble oldrotatex=0, oldrotatey=0;
 
 Matrix W("E");
 Matrix WR("E");
@@ -43,6 +44,7 @@ Matrix RX("Rx", dX);
 Matrix RY("Ry", dY);
 Matrix VMW;
 Matrix VCW;
+Matrix ALL;
 
 Matrix temp;
 
@@ -140,7 +142,7 @@ void display()
 
     cube.data = cubePoints;
 
-
+    ALL = VMW * RX *RY;
 
     for (int i = 0; i < 8; i++)
     {
@@ -149,7 +151,7 @@ void display()
         seged.setElement(2, 0, cube.data[i].z);
         seged.setElement(3, 0, 1);
 
-        seged2 = VMW * seged;
+        seged2 = ALL * seged;
 
         cube.data[i].x = seged2.getElement(0, 0);
         cube.data[i].y = seged2.getElement(1, 0);
@@ -162,7 +164,7 @@ void display()
 
     cube2.data = cubePoints2;
 
-
+    ALL = VCW * RX * RY;
 
     for (int i = 0; i < 8; i++)
     {
@@ -171,7 +173,7 @@ void display()
         seged.setElement(2, 0, cube2.data[i].z);
         seged.setElement(3, 0, 1);
 
-        seged2 = VCW * seged;
+        seged2 = ALL * seged;
 
         cube2.data[i].x = seged2.getElement(0, 0);
         cube2.data[i].y = seged2.getElement(1, 0);
@@ -224,6 +226,8 @@ void processMouse(GLint button, GLint action, GLint xMouse, GLint yMouse)
     if (button == GLUT_LEFT_BUTTON && action == GLUT_UP)
     {
         dragged = false;
+        oldrotatex = RX.alfa;
+        oldrotatey = RY.alfa;
         glutPostRedisplay();
     }
 }
@@ -235,55 +239,20 @@ void processMouseActiveMotion(GLint xMouse, GLint yMouse)
     {
         mouseX = xMouse;
         mouseY = winHeight - yMouse;
-        GLdouble degx = (xMouse - originalx) / static_cast<GLdouble>(100);
-        GLdouble degy = (winHeight - yMouse - originaly) / static_cast<GLdouble>(100);
 
-        RX.setDeg("Rx", -1 * degy);
-        RY.setDeg("Ry", degx);
-
-        temp = RX * RY;
-
-        seged.setElement(3, 0, 1);
+        GLdouble degx = (xMouse - originalx) * 0.25;
+        GLdouble degy = (winHeight - yMouse - originaly) * 0.25;
 
 
-        for (int i = 0; i < 8; i++)
-        {
-
-            seged.setElement(0, 0, cubePoints[i].x);
-            seged.setElement(1, 0, cubePoints[i].y);
-            seged.setElement(2, 0, cubePoints[i].z);
-
-            seged2 = temp * seged;
-
-            cubePoints[i].x = seged2.getElement(0, 0);
-            cubePoints[i].y = seged2.getElement(1, 0);
-            cubePoints[i].z = seged2.getElement(2, 0);
-            cubePoints[i].t = seged2.getElement(3, 0);
-        }
 
 
-        seged.setElement(3, 0, 1);
+        RX.setDeg("Rx", oldrotatex - degy);
+        RY.setDeg("Ry", oldrotatey + degx);
 
-        for (int i = 0; i < 8; i++)
-        {
-            seged.setElement(0, 0, cubePoints2[i].x);
-            seged.setElement(1, 0, cubePoints2[i].y);
-            seged.setElement(2, 0, cubePoints2[i].z);
-            seged2 = temp * seged;
-
-            cubePoints2[i].x = seged2.getElement(0, 0);
-            cubePoints2[i].y = seged2.getElement(1, 0);
-            cubePoints2[i].z = seged2.getElement(2, 0);
-            cubePoints2[i].t = seged2.getElement(3, 0);
-
-            cubePoints2[i].norma();
-
-        }
-
+        glutPostRedisplay();
     }
 
 
-    glutPostRedisplay();
 }
 
 void mouseWheel(int button, int dir, int x, int y)
