@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <math.h>
+#include <cmath>
 #include "myPoint4D.hpp"
 
 #define PI	3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
@@ -16,14 +16,14 @@ class myMatrix
 
     void rs()
     {
-
+        /*
         matrix.resize(n);
         for (int i = 0; i < n; i++)
         {
             matrix[i].resize(m);
-        }
+        }*/
 
-        /*matrix = new GLdouble*[n];
+        matrix = new GLdouble*[n];
         for (int i = 0; i < n; i++)
         {
             matrix[i] = new GLdouble[m];
@@ -36,14 +36,14 @@ class myMatrix
                 else
                     matrix[i][j] = 0;
             }
-        }*/
+        }
 
     }
 
 public:
     GLdouble alfa;
-    std::vector<std::vector<T>> matrix;
-    //GLdouble ** matrix;
+    //std::vector<std::vector<T>> matrix;
+    GLdouble ** matrix;
 
     myMatrix() {}
 
@@ -55,8 +55,8 @@ public:
         }
 
         delete[] matrix;
-    }
-    */
+    }*/
+
     myMatrix(int r_nm)
     {
         n = r_nm;
@@ -109,19 +109,19 @@ public:
         {
             alfa = v1;
             GLdouble tempRad = v1 * (PI / (double)180);
-            matrix[1][1] = cos(tempRad);
-            matrix[1][2] = -sin(tempRad);
-            matrix[2][1] = sin(tempRad);
-            matrix[2][2] = cos(tempRad);
+            matrix[1][1] = std::cos(tempRad);
+            matrix[1][2] = -std::sin(tempRad);
+            matrix[2][1] = std::sin(tempRad);
+            matrix[2][2] = std::cos(tempRad);
         }
         else if (type == "Ry")
         {
             alfa = v1;
             GLdouble tempRad = v1 * (PI / (double)180);
-            matrix[0][0] = cos(tempRad);
-            matrix[0][2] = sin(tempRad);
-            matrix[2][0] = -sin(tempRad);
-            matrix[2][2] = cos(tempRad);
+            matrix[0][0] = std::cos(tempRad);
+            matrix[0][2] = std::sin(tempRad);
+            matrix[2][0] = -std::sin(tempRad);
+            matrix[2][2] = std::cos(tempRad);
         }
         else if (type == "Vm")
         {
@@ -136,13 +136,12 @@ public:
         {
             double q = 1.0/2.0;
             GLdouble tempRad = v1 * (PI / (double)180);
-            matrix[0][0] = q * cos(tempRad);
+            matrix[0][0] = q * std::cos(tempRad);
             matrix[0][1] = 1;
-            matrix[1][0] = q * sin(tempRad);
+            matrix[1][0] = q * std::sin(tempRad);
             matrix[1][1] = 0;
             matrix[1][2] = 1;
             matrix[2][2] = 0;
-            matrix[3][3] = 1;
 
         }
 
@@ -155,7 +154,10 @@ public:
         n = 4;
         m = 4;
         rs();
-
+        for (int i = 0; i < n; i++)
+        {
+            matrix[i][i] = 1.0;
+        }
         GLdouble t1 = w2.x - w1.x;
         GLdouble t2 = w2.y - w1.y;
         if (t1 != 0 && t2 != 0)
@@ -175,19 +177,26 @@ public:
         {
             alfa = value;
             GLdouble tempRad = value * (PI / (double)180);
-            matrix[1][1] = cos(tempRad);
-            matrix[1][2] = -sin(tempRad);
-            matrix[2][1] = sin(tempRad);
-            matrix[2][2] = cos(tempRad);
+            matrix[1][1] = std::cos(tempRad);
+            matrix[1][2] = -std::sin(tempRad);
+            matrix[2][1] = std::sin(tempRad);
+            matrix[2][2] = std::cos(tempRad);
         }
         else if (type == "Ry")
         {
             alfa = value;
             GLdouble tempRad = value * (PI / (double)180);
-            matrix[0][0] = cos(tempRad);
-            matrix[0][2] = sin(tempRad);
-            matrix[2][0] = -sin(tempRad);
-            matrix[2][2] = cos(tempRad);
+            matrix[0][0] = std::cos(tempRad);
+            matrix[0][2] = std::sin(tempRad);
+            matrix[2][0] = -std::sin(tempRad);
+            matrix[2][2] = std::cos(tempRad);
+        }
+        else if (type == "Ax")
+        {
+            GLdouble tempRad = value *(PI / (double)180);
+            double q = 1.0/2.0;
+            matrix[0][0] = q * std::cos(tempRad);
+            matrix[1][0] = q * std::sin(tempRad);
         }
     }
 
@@ -379,7 +388,7 @@ public:
                     tDouble += matrix[i][k] * rhs.getElement(k, j) ;
                 }
 
-                temp.setElement(i, j, tDouble);
+                temp.matrix[i][j] = tDouble;
             }
         }
 

@@ -2,6 +2,7 @@
 #define MY_POINT_4D
 
 
+template <typename T> class myMatrix;
 template<typename T>
 class myPoint4D
 {
@@ -23,6 +24,22 @@ public:
     void print()
     {
         std::cout << x << ", " << y << ", " << z << ", " << t << std::endl;
+    }
+
+    inline void trans(const myMatrix<T>& m)
+    {
+        GLdouble temp=0;
+        T oX = x;
+        T oY = y;
+        T oZ = z;
+        T oT = t;
+
+        x = oX * m.matrix[0][0] + oY * m.matrix[0][1]+ oZ * m.matrix[0][2]+oT * m.matrix[0][3];
+        y = oX * m.matrix[1][0] + oY * m.matrix[1][1]+ oZ * m.matrix[1][2]+oT * m.matrix[1][3];
+        z = oX * m.matrix[2][0] + oY * m.matrix[2][1]+ oZ * m.matrix[2][2]+oT * m.matrix[2][3];
+        t = oX * m.matrix[3][0] + oY * m.matrix[3][1]+ oZ * m.matrix[3][2]+oT * m.matrix[3][3];
+
+
     }
 };
 
