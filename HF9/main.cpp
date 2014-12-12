@@ -19,8 +19,8 @@ GLdouble alfa = 225;
 POINT4D w1(-20, -20);
 POINT4D w2(20, 20);
 
-POINT4D v1(200, 0);
-POINT4D v2(720, 720);
+POINT4D v1(300, 0);
+POINT4D v2(800, 800);
 
 MATRIX vw;
 MATRIX a("Ax", alfa);
@@ -55,6 +55,7 @@ void init()
 GLdouble f(const GLdouble& x, const GLdouble& y)
 {
     return std::sin(std::sqrt(x*x + y*y)+p);
+    //return cos(x+p)+ cos(y+p);
 }
 
 
@@ -100,7 +101,7 @@ void display()
             t4.trans(WVA);
             t4.norma();
 
-            glColor3f(1.0, 0.0, 0.0);
+            glColor3f(0.0, 0.0, 1.0);
 
             glBegin(GL_POLYGON);
 
@@ -123,7 +124,6 @@ void display()
 
         }
     }
-    std::cout << alfa << std::endl;
     glutSwapBuffers();
 }
 
@@ -133,7 +133,7 @@ void update(int n)
     p -= 0.1;
 
     glutPostRedisplay();
-    glutTimerFunc(10, update, 0);
+    glutTimerFunc(50, update, 0);
 }
 
 void keyPressed(unsigned char key, int x, int y)
@@ -178,7 +178,7 @@ int main(int argc, char** argv)
     glutDisplayFunc(display);
     glutKeyboardFunc(keyPressed);
     glutKeyboardUpFunc(keyUp);
-    glutTimerFunc(10, update, 0);
+    glutTimerFunc(50, update, 0);
     glutMainLoop();
     return 0;
 }
