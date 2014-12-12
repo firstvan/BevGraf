@@ -13,7 +13,10 @@ GLdouble lepeskoz = 0.1;
 myPoint4D<GLdouble> center(0, 0, 0);
 GLdouble r = 1.0;
 
-myMatrix<GLdouble> VC("Vc", 2);
+double s = 2.0;
+myPoint4D<GLdouble> centerPoint(0, 0, s);
+
+myMatrix<GLdouble> VC("Vc", s);
 myMatrix<GLdouble> WV;
 
 myPoint4D<GLdouble> w1(-2.0, -2.0);
@@ -34,7 +37,12 @@ myPoint4D<GLdouble> temp4;
 
 myPoint4D<GLdouble> vectorialMultiply(const myPoint4D<GLdouble> a, myPoint4D<GLdouble> b)
 {
+    myPoint4D<GLdouble> temp;
+    temp.x = (a.y * b.z) - (b.y * a.z);
+    temp.y = -1 * ((a.x * b.z) - (b.x * a.z));
+    temp.z = (a.x * b.y) - (b.x * a.y);
 
+    return temp;
 
 }
 
@@ -95,6 +103,13 @@ void display()
 
             temp4.trans(trans);
             temp4.norma();
+
+            myPoint4D<GLdouble> normalVec;
+            normalVec = vectorialMultiply(temp2-temp1, temp3-temp1);
+
+
+
+
 
             glBegin(GL_LINE_LOOP);
 

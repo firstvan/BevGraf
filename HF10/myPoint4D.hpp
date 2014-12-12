@@ -43,6 +43,16 @@ public:
     }
 
 
+    myPoint4D<GLdouble> operator-(const myPoint4D<GLdouble>& rhs)
+    {
+        myPoint4D<GLdouble> temp;
+
+        temp.x = x - rhs.x;
+        temp.y = y - rhs.y;
+        temp.z = z - rhs.z;
+
+        return temp;
+    }
 };
 
 #endif
