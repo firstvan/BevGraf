@@ -53,6 +53,16 @@ public:
 
         return temp;
     }
+
+    void doUnitVector()
+    {
+        GLdouble len = sqrt(x*x + y*y + z*z);
+
+        x /= len;
+        y /= len;
+        z /= len;
+
+    }
 };
 
 #endif
