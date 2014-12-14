@@ -13,13 +13,14 @@
 #define PI	3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
 GLsizei winWidth = 1280, winHeight = 720;
-GLdouble lepeskoz = PI / 15;
+GLdouble lepeskoz = PI / 30;
 myPoint4D<GLdouble> center(0, 0, 0);
 GLdouble r = 1.0;
-
-double s = 2.0;
+GLdouble step = 0.01;
+GLint keyStates[256];
+double s = 2;
 myPoint4D<GLdouble> centerPoint(0, 0, s);
-myPoint4D<GLdouble> f(1280, 1000, 1000);
+myPoint4D<GLdouble> f(700, 1000, 1000);
 
 myMatrix<GLdouble> VC("Vc", s);
 myMatrix<GLdouble> WV;
@@ -30,9 +31,10 @@ myPoint4D<GLdouble> w2(2.0, 2.0);
 myPoint4D<GLdouble> v1(100.0, 20.0);
 myPoint4D<GLdouble> v2(800.0, 720.0);
 
-myMatrix<GLdouble> RX("Rx", 0);//25
-myMatrix<GLdouble> RY("Ry", 0);//20
-
+myMatrix<GLdouble> RX("Rx", 25);//25
+myMatrix<GLdouble> RY("Ry", 20);//20
+myMatrix<GLdouble> ROTATE;
+myMatrix<GLdouble> WVVC;
 myMatrix<GLdouble> trans;
 
 myPoint4D<GLdouble> temp1;
@@ -93,7 +95,11 @@ void init()
 
     WV.initWindowToViewPort(w1, w2, v1, v2);
 
-    trans = WV * VC * RX * RY;
+    ROTATE = RX * RY;
+
+    WVVC = WV * VC;
+
+    trans = WVVC * ROTATE;
 
     for (GLdouble fi = 0.0; fi < PI; fi += lepeskoz)
     {
@@ -125,13 +131,10 @@ void init()
 
             tempSide.x4 = temp4;
 
-            if (fi < PI/2)
+            if (fi < PI / 2)
                 tempSide.norma = vectorialMultiply(temp1 - temp2, temp1 - temp3);
             else
                 tempSide.norma = vectorialMultiply(temp4 - temp1, temp1 - temp3);
-
-
-            //tempSide.norma.doUnitVector();
 
             points.emplace_back(tempSide);
         }
@@ -139,13 +142,17 @@ void init()
 
     std::sort(points.begin(), points.end(), custom);
 
-    f.doUnitVector();
+    //f.doUnitVector();
 
 }
+
+
+void keyOperations();
 
 void display()
 {
 
+    keyOperations();
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(0.0, 0.0, 0.0);
 
@@ -160,6 +167,20 @@ void display()
         temp3 = a.x3;
         temp4 = a.x4;
 
+        myPoint4D<GLdouble> t;
+        t = temp1;
+        t.trans(ROTATE);
+        myPoint4D<GLdouble> S;
+        S.x = -1 * t.x;
+        S.y = -1 * t.y;
+        S.z = -1 * t.z + centerPoint.z;
+        S.doUnitVector();
+
+        a.norma.trans(ROTATE);
+        a.norma.norma();
+        a.norma.doUnitVector();
+
+
         temp1.trans(trans);
         temp1.norma();
         temp2.trans(trans);
@@ -169,46 +190,36 @@ void display()
         temp4.trans(trans);
         temp4.norma();
 
-        //centerPoint.trans(trans);
-        myPoint4D<GLdouble> S;
-        S.x = -1 * temp1.x;
-        S.y = -1 * temp1.y;
-        S.z = -1 * temp1.z + centerPoint.z;
-        S.doUnitVector();
 
-        a.norma.trans(trans);
-        a.norma.norma();
-        a.norma.doUnitVector();
+
+
 
         double alfa = a.norma.x * S.x + a.norma.y * S.y + a.norma.z * S.z;
 
-        //if (alfa > 0)
-        //{
+        if (alfa > 0)
+        {
 
-        double comp = a.norma.x * f.x + a.norma.y * f.y + a.norma.z * f.z;
+            myPoint4D<GLdouble> fVector;
+            fVector.x = f.x - temp1.x;
+            fVector.y = f.y - temp1.y;
+            fVector.z = f.z - temp1.z;
+            fVector.doUnitVector();
 
-        comp = (comp + 1) / double(2);
+            double comp = a.norma.x * fVector.x + a.norma.y * fVector.y + a.norma.z * fVector.z;
 
-        glColor3f(comp, comp, comp);
-        glBegin(GL_POLYGON);
+            comp = (comp + 1) / double(2);
 
-        glVertex2d(temp1.x, temp1.y);
-        glVertex2d(temp2.x, temp2.y);
-        glVertex2d(temp3.x, temp3.y);
-        glVertex2d(temp4.x, temp4.y);
+            glColor3f(comp, comp, comp);
+            glBegin(GL_POLYGON);
 
-        glEnd();
+            glVertex2d(temp1.x, temp1.y);
+            glVertex2d(temp2.x, temp2.y);
+            glVertex2d(temp3.x, temp3.y);
+            glVertex2d(temp4.x, temp4.y);
 
-        /*glColor3f(1.0, 0.0, 1.0);
-        a.norma.trans(trans);
-        a.norma.norma();
-        glBegin(GL_LINES);
-        glVertex2d(a.norma.x, a.norma.y);
-        glVertex2d(S.x, S.y);
-        glEnd();*/
+            glEnd();
 
-
-        //}
+        }
     }
 
 
@@ -216,7 +227,36 @@ void display()
 
     glutSwapBuffers();
 }
+void keyPressed(unsigned char key, int x, int y)
+{
+    keyStates[key] = 1;
+}
 
+void keyUp(unsigned char key, int x, int y)
+{
+    keyStates[key] = 0;
+}
+
+
+void keyOperations()
+{
+    if (keyStates['w'])
+    {
+        if (s > 1.1)
+            s -= step;
+    }
+    if (keyStates['s'])
+    {
+        s += step;
+    }
+    centerPoint.z = s;
+    VC.setS(s);
+    WVVC = WV * VC;
+
+    trans = WVVC * ROTATE;
+
+    glutPostRedisplay();
+}
 
 int main(int argc, char** argv)
 {
@@ -227,8 +267,8 @@ int main(int argc, char** argv)
     init();
 
     glutDisplayFunc(display);
-//	glutKeyboardFunc(keyPressed);
-//	glutKeyboardUpFunc(keyUp);
+    glutKeyboardFunc(keyPressed);
+    glutKeyboardUpFunc(keyUp);
 //	glutTimerFunc(50, update, 0);
     glutMainLoop();
     return 0;

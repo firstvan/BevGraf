@@ -200,6 +200,10 @@ public:
         }
     }
 
+    void setS(T value)
+    {
+        matrix[3][2] = -1 * (1 / static_cast<GLdouble>(value));
+    }
 
     void setElement(int r_n, int r_m, T value)
     {
