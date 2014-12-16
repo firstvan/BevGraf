@@ -15,18 +15,18 @@
 GLsizei winWidth = 1280, winHeight = 720;
 GLdouble lepeskoz = PI / 30;
 myPoint4D<GLdouble> center(0, 0, 0);
-GLdouble r = 1.0;
+GLdouble r = 0.5;
 GLdouble step = 0.01;
 GLint keyStates[256];
-double s = 2;
+double s = 8;
 myPoint4D<GLdouble> centerPoint(0, 0, s);
-myPoint4D<GLdouble> f(0.5, 1, 2);
+myPoint4D<GLdouble> f(1, 1, 1);
 
 myMatrix<GLdouble> VC("Vc", s);
 myMatrix<GLdouble> WV;
 
-myPoint4D<GLdouble> w1(-2.0, -2.0);
-myPoint4D<GLdouble> w2(2.0, 2.0);
+myPoint4D<GLdouble> w1(-1.0, -1.0);
+myPoint4D<GLdouble> w2(1.0, 1.0);
 
 myPoint4D<GLdouble> v1(100.0, 20.0);
 myPoint4D<GLdouble> v2(800.0, 720.0);
@@ -59,7 +59,8 @@ struct
 {
     bool operator()(SIDE a, SIDE b)
     {
-        return ((a.x1.z + a.x2.z + a.x3.z + a.x4.z) / 4) < ((b.x1.z + b.x2.z + b.x3.z + b.x4.z) / 4);
+        //return ((a.x1.z + a.x2.z + a.x3.z + a.x4.z) / 4) < ((b.x1.z + b.x2.z + b.x3.z + b.x4.z) / 4);
+        return a.x1.z < b.x1.z;
     }
 } custom;
 
@@ -142,7 +143,7 @@ void init()
 
     std::sort(points.begin(), points.end(), custom);
 
-    //f.doUnitVector();
+    f.doUnitVector();
 
 }
 
@@ -198,18 +199,11 @@ void display()
 
         if (alfa > 0)
         {
-
-            myPoint4D<GLdouble> fVector;
-            fVector.x = f.x - t.x;
-            fVector.y = f.y - t.y;
-            fVector.z = f.z - t.z;
-            fVector.doUnitVector();
-
-            double comp = a.norma.x * fVector.x + a.norma.y * fVector.y + a.norma.z * fVector.z;
+            double comp = a.norma.x * f.x + a.norma.y * f.y + a.norma.z * f.z;
 
             comp = (comp + 1) / double(2);
 
-            glColor3f(comp, comp, comp);
+            glColor3f(comp,comp,comp);
             glBegin(GL_POLYGON);
 
             glVertex2d(temp1.x, temp1.y);
@@ -242,7 +236,7 @@ void keyOperations()
 {
     if (keyStates['w'])
     {
-        if (s > 1.1)
+        if (s > 0.6)
             s -= step;
     }
     if (keyStates['s'])
