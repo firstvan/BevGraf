@@ -20,7 +20,7 @@ GLdouble step = 0.01;
 GLint keyStates[256];
 double s = 2;
 myPoint4D<GLdouble> centerPoint(0, 0, s);
-myPoint4D<GLdouble> f(700, 1000, 1000);
+myPoint4D<GLdouble> f(0.5, 1, 2);
 
 myMatrix<GLdouble> VC("Vc", s);
 myMatrix<GLdouble> WV;
@@ -200,9 +200,9 @@ void display()
         {
 
             myPoint4D<GLdouble> fVector;
-            fVector.x = f.x - temp1.x;
-            fVector.y = f.y - temp1.y;
-            fVector.z = f.z - temp1.z;
+            fVector.x = f.x - t.x;
+            fVector.y = f.y - t.y;
+            fVector.z = f.z - t.z;
             fVector.doUnitVector();
 
             double comp = a.norma.x * fVector.x + a.norma.y * fVector.y + a.norma.z * fVector.z;
